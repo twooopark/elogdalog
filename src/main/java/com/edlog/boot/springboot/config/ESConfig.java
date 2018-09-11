@@ -9,7 +9,11 @@ import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
+/**
+ * YEOTAE
+ * @author user
+ *
+ */
 @Configuration
 public class ESConfig {
 	
