@@ -6,7 +6,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
+/**
+ * 
+ * YEOTAE
+ * @author user
+ *
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
