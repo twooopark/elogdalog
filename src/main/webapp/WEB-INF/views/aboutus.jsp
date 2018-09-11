@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>준비중입니다.</h1>
+	<h1>테스트 준비중입니다.</h1>
 </body>
 </html>
