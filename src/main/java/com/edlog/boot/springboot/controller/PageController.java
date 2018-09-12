@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.edlog.boot.springboot.model.MemberDTO;
 import com.edlog.boot.springboot.service.MemberService;
-
+/**
+ * 
+ * @author CHAEHEE
+ *
+ */
 @Controller
 public class PageController {
 	@Autowired MemberService Mservice;
