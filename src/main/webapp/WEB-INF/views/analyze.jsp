@@ -73,7 +73,7 @@
 				</div>
 				<!--검색 조건 창-->
 				<div class="iframe_wrapper">
-				<iframe src="http://localhost:5601/app/kibana#/dashboard/335b0440-b254-11e8-a694-6b6a3d66d059?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-14d%2Cmode%3Arelative%2Cto%3Anow))" height="100%" width="90%"></iframe>
+				<iframe src="http://172.21.25.76:5601/app/kibana#/dashboard/335b0440-b254-11e8-a694-6b6a3d66d059?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-14d%2Cmode%3Arelative%2Cto%3Anow))" height="100%" width="90%"></iframe>
 <!-- 				<iframe src="https://03be234be9c84b59ae9ce085b19b78b8.ap-northeast-1.aws.found.io:9243/app/kibana#/dashboard/4402b8e0-b0ad-11e8-a10b-c3e9fdd64ff5?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:'2017-11-30T05:33:01.064Z',mode:absolute,to:'2018-09-05T01:43:34.963Z'))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!f,hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:15,i:'1',w:24,x:0,y:0),id:'32f09ae0-b0ad-11e8-a10b-c3e9fdd64ff5',panelIndex:'1',type:visualization,version:'6.4.0')),query:(language:lucene,query:''),timeRestore:!f,title:TEST1,viewMode:view)" width="100%" height="90%"></iframe> -->
 				</div>
 			</div>		

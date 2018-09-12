@@ -25,4 +25,8 @@ public class HomeController {
 	public String document() {
 		return "document";
 	}
+	@RequestMapping("/filterGen")
+	public String filterGen() {
+		return "filterGen";
+	}
 }
