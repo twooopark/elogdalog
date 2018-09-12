@@ -21,6 +21,7 @@ public class PageController {
 	@RequestMapping("/analyze")public String analyze() {return "analyze";}
 	@RequestMapping("/document")public String document() {return "document";}
 	
+		
 	@RequestMapping("/login")
 	public String loginCheck(MemberDTO member, HttpServletResponse response) {
 		return "homepage";
@@ -30,4 +31,10 @@ public class PageController {
 	public String signup(MemberDTO member, HttpServletResponse response) {
 		return "";
 	}
+	
+	@RequestMapping("/filterGen")
+	public String filterGen() {
+		return "filterGen";
+	}
+
 }
