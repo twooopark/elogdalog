@@ -31,9 +31,9 @@ public class ESConfig {
 //	private String port;
 	
 	public Client client() throws UnknownHostException {
-
-		//System.out.println(esc.getClusterName() + "/" + esc.getHost()+ "/" + esc.getPort());
-
+		
+//		System.out.println(esc.getClusterName() + "/" + esc.getHost()+ "/" + esc.getPort());
+		
 		Settings settings = Settings.builder()
 				.put("cluster.name", clusterName)
 				.put("client.transport.sniff", true) //True로 설정시 클러스터 연결 후 위상 재구성해 다른 노드의 주소를 얻음

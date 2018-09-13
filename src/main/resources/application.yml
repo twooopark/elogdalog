@@ -1,6 +1,14 @@
-
 spring:
   elasticsearch:
      cluster-name: MyElastic
      host: 127.0.0.1
      port : 9300
+
+my:
+  properties: 
+     index: elog_index_2018.09.13
+     type: elog_doctype
+     aggs: aggsName
+
+
+
