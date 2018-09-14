@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.edlog.boot.springboot.builder.QueryBuilderTool;
 import com.edlog.boot.springboot.util.Aggregations;
 import com.edlog.boot.springboot.util.Query;
 
@@ -23,7 +25,8 @@ public class AggregationController {
 
 	@Autowired
 	Query query;
-
+	@Autowired
+	QueryBuilderTool qb;
 	@Autowired
 	Aggregations aggs;
 
@@ -120,18 +123,32 @@ public class AggregationController {
 
 		QueryBuilder boolQuery = query.boolQuery(fieldName1, value1, fieldName2, value2);
 		//QueryBuilder rangeQuery = query.getDateRange("2018-08-10", "2018-08-20");
-		List<Map<String, Object>> boolList = query.getSearchResponse(boolQuery);
-		
+		SearchResponse sr = qb.getSearchResponse(boolQuery);
+		List<Map<String, Object>> boolList = qb.getResponseAsList(sr);
 		int size = boolList.size();
-		System.out.println(boolList.get(0));
 		System.out.println(size);
 		
 		String text = null;
 		for(int i = 0; i < size; i++) {
 			text += boolList.get(i).toString();
-			System.out.println(boolList.get(i));
+			String file_path = (String) boolList.get(i).get("file_path");
+			String server = (String) boolList.get(i).get("server");
+			String access_uri = (String) boolList.get(i).get("access_uri");
+			String offset = Integer.toString((int) boolList.get(i).get("offset"));
+			String access_date = (String) boolList.get(i).get("access_date");
+			String remark = (String) boolList.get(i).get("remark");
+			String source = (String) boolList.get(i).get("source");
+			String message = (String) boolList.get(i).get("message");
+			String access_ip = (String) boolList.get(i).get("access_ip");
+			String file_date = (String) boolList.get(i).get("file_date");
+			String unicro = (String) boolList.get(i).get("service");
+			String access_id = (String) boolList.get(i).get("access_id");
+			String action = (String) boolList.get(i).get("action");
+			
+			System.out.println(file_path +"//"+ server +"//"+ access_uri +"//"+ offset +"//"+ access_date
+					+"//"+ remark +"//"+ source +"//"+ message +"//"+ access_ip +"//"+ file_date +"//"+ unicro 
+					+"//"+ access_id +"//"+ action);
 		}
-		
 //		List<Map<String, Object>> rangelist = query.getSearchResponse(rangeQuery);
 //		int bsize = rangelist.size();
 //		System.out.println(rangelist.get(0));
@@ -140,28 +157,37 @@ public class AggregationController {
 		return text;	
 	}
 	
-	@GetMapping("/nested/{fieldName1}/{value1}/{fieldName2}/{value2}")
-	public Map<String, Object> nested(@PathVariable final String fieldName1, 
-			@PathVariable final String value1, @PathVariable final String fieldName2, @PathVariable final String value2)
-			throws UnknownHostException {
-
-		QueryBuilder rangeQuery = query.getDateRange("2018-08-10", "2018-08-20");
+	@GetMapping("/formTest")
+	public String formTest() throws UnknownHostException {
 		
-		List<Map<String, Object>> rangeList = query.getSearchResponse(rangeQuery);
-		
-		List<Map<String, Object>> nestedList = query.getSearchResponse(rangeQuery);
-		//List<Map<String, Object>> rangeList = query.getSearchResponse(rangeQuery);
-		
-		
-		int size = rangeList.size();
-		System.out.println(rangeList.get(0));
-		System.out.println(size);
-		
-		//rangeList.
-		
-		return rangeList.get(0);	
+		SearchResponse sr = qb.getSearchResponse(query.formQuery("unicro", "2018-08-10", "2018-08-20"));
+		List<Map<String, Object>> formList = qb.getResponseAsList(sr);
+		int formListSize = formList.size();
+		System.out.println(formListSize);
+		String text = null;
+		for(int i = 0; i < formListSize; i++) {
+			text += formList.get(i).toString();
+			String file_path = (String) formList.get(i).get("file_path");
+			String server = (String) formList.get(i).get("server");
+			String access_uri = (String) formList.get(i).get("access_uri");
+			String offset = Integer.toString((int) formList.get(i).get("offset"));
+			String access_date = (String) formList.get(i).get("access_date");
+			String remark = (String) formList.get(i).get("remark");
+			String source = (String) formList.get(i).get("source");
+			String message = (String) formList.get(i).get("message");
+			String access_ip = (String) formList.get(i).get("access_ip");
+			String file_date = (String) formList.get(i).get("file_date");
+			String unicro = (String) formList.get(i).get("service");
+			String access_id = (String) formList.get(i).get("access_id");
+			String action = (String) formList.get(i).get("action");
+			
+			System.out.println(file_path +"//"+ server +"//"+ access_uri +"//"+ offset +"//"+ access_date
+					+"//"+ remark +"//"+ source +"//"+ message +"//"+ access_ip +"//"+ file_date +"//"+ unicro 
+					+"//"+ access_id +"//"+ action);
+		}
+		System.out.println(formList.get(0));
+		return text;
 	}
-	
 	
 	@GetMapping("/booltest/{fieldName1}/{value1}/{fieldName2}/{value2}")
 	public Map<String, Object> boolTest(@PathVariable final String fieldName1, 

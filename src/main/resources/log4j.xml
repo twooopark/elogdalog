@@ -41,7 +41,7 @@
         <appender-ref ref="console"/> 
     </logger> 
     <logger name="com.edlog.boot.springboot.controller" additivity="false">
-        <level value="DEBUG"/> 
+        <level value="INFO"/> 
         <appender-ref ref="console"/> 
     </logger> 
     
