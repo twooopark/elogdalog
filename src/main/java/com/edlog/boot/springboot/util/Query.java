@@ -20,7 +20,7 @@ import com.edlog.boot.springboot.Service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 
 @Configuration
-public class TestQuery {
+public class Query {
 	@Autowired
 	ESConfig esConfig;
 	@Autowired
@@ -33,7 +33,7 @@ public class TestQuery {
 	@Value("${my.properties.aggs}")
 	private String aggs;
 
-	public TestQuery() {
+	public Query() {
 	}
 
 	public List<Map<String, Object>> getQResponse(String fieldName, String value) throws UnknownHostException {

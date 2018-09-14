@@ -24,7 +24,10 @@
 				}
 			});
 		})	
-		function setting(){
+		function introduce(){
+			alert("준비중입니다");
+		}
+		function aboutus(){
 			alert("준비중입니다");
 		}
 	</script>
@@ -38,8 +41,9 @@
 				<div class="top_menu">
 					<a href="/homepage" class="logo"><img src="resources/images/logo.jpg" alt="logo"></a>
 					<ul class="nav_box">
-						<li><a href="/document">시작하기</a></li>
-						<li><a href="#" onclick="setting();return false;">설정</a></li>
+						<li><a href="#" onclick="introduce();return false;">소개</a></li>
+						<li><a href="/analyze">시작</a></li>
+						<li><a href="#" onclick="aboutus();return false;">ABOUT US</a></li>
 					</ul>
 				</div>
 			</header>
