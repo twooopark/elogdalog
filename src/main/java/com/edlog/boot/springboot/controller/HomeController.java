@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.edlog.boot.springboot.Service.QueryServiceImpl;
+import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;

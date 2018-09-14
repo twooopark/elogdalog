@@ -1,4 +1,4 @@
-package com.edlog.boot.springboot.Service;
+package com.edlog.boot.springboot.service;
 
 import java.util.List;
 import java.util.Map;
