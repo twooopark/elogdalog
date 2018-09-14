@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edlog.boot.springboot.builder.QueryBuilderTool;
+import com.edlog.boot.springboot.Service.QueryServiceImpl;
 import com.edlog.boot.springboot.util.Aggregations;
 import com.edlog.boot.springboot.util.Query;
 
@@ -26,7 +26,7 @@ public class AggregationController {
 	@Autowired
 	Query query;
 	@Autowired
-	QueryBuilderTool qb;
+	QueryServiceImpl qb;
 	@Autowired
 	Aggregations aggs;
 
@@ -109,7 +109,6 @@ public class AggregationController {
 
 		List<Map<String, Object>> list = query.getQResponse(fieldName, value);
 
-		Map<String, Object> map = list.get(0);
 		int size = list.size();
 		
 		System.out.println(list.get(0));
@@ -149,10 +148,6 @@ public class AggregationController {
 					+"//"+ remark +"//"+ source +"//"+ message +"//"+ access_ip +"//"+ file_date +"//"+ unicro 
 					+"//"+ access_id +"//"+ action);
 		}
-//		List<Map<String, Object>> rangelist = query.getSearchResponse(rangeQuery);
-//		int bsize = rangelist.size();
-//		System.out.println(rangelist.get(0));
-//		System.out.println(bsize);
 		
 		return text;	
 	}

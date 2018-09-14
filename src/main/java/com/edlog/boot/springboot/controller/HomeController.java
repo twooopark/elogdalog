@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.edlog.boot.springboot.builder.QueryBuilderTool;
+import com.edlog.boot.springboot.Service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;
@@ -26,7 +26,7 @@ public class HomeController {
 	@Autowired
 	Query query;
 	@Autowired
-	QueryBuilderTool qb;
+	QueryServiceImpl qb;
 	@Autowired
 	GenerateForm gf;
 	
@@ -113,6 +113,7 @@ public class HomeController {
 		downloadCount = gf.getLoginData(serviceName, startDate, endDate, fieldName, "excelDownload");
 		
 		
+		//모델에 더하기
 		model.addAttribute("date", date);
 		model.addAttribute("period", period);
 		model.addAttribute("accessTry", accessTry);

@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edlog.boot.springboot.config.ESConfig;
-import com.edlog.boot.springboot.config.IndexOperations;
+import com.edlog.boot.springboot.index.IndexOperations;
 
 @RestController
 @RequestMapping("/rest")
-public class TestController {
+public class DocCurdTestController {
 
 	@Autowired
 	ESConfig esConfig;

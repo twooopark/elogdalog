@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-import com.edlog.boot.springboot.builder.QueryBuilderTool;
+import com.edlog.boot.springboot.Service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 
 @Configuration
@@ -24,7 +24,7 @@ public class Query {
 	@Autowired
 	ESConfig esConfig;
 	@Autowired
-	QueryBuilderTool qb;
+	QueryServiceImpl qb;
 
 	@Value("${my.properties.index}")
 	private String index;

@@ -24,15 +24,10 @@ public class ESConfig {
 	@Value("${spring.elasticsearch.port}")
 	private String port;
 	
-//	private String clusterName="";
-//
-//	private String host;
-//	
-//	private String port;
-	
+	@SuppressWarnings("resource")
 	public Client client() throws UnknownHostException {
 		
-//		System.out.println(esc.getClusterName() + "/" + esc.getHost()+ "/" + esc.getPort());
+
 		
 		Settings settings = Settings.builder()
 				.put("cluster.name", clusterName)
@@ -51,26 +46,5 @@ public class ESConfig {
 
 		return client;
 	}
-	/*@Bean
-	ElasticsearchOperations elasticsearchOperations() {
-		File tmpDir = null;
-		try {
-			tmpDir = File.createTempFile("temp-elastic", Long.toString(System.nanoTime()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Settings.Builder elasticsearchSettings =
-				Settings.builder()
-					.put("http.enabled", "true")
-					.put("index.number_of_shard", "5")
-					.put("path.data", new File(tmpDir,"data").getAbsolutePath())
-					.put("path.data", new File(tmpDir,"data").getAbsolutePath())
-					.put("path.data", new File(tmpDir,"data").getAbsolutePath())
-					.put("path.home", tmpDir);
-		return new ElasticsearchTemplate(
-				.local(true)
-				.settings(elasticsearchSettings.build())
-				.node()
-				.client());
-	}*/
+	
 }

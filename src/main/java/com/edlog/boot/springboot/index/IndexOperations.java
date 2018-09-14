@@ -1,9 +1,10 @@
-package com.edlog.boot.springboot.config;
+package com.edlog.boot.springboot.index;
 
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.client.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import com.edlog.boot.springboot.config.ESConfig;
 
 
 public class IndexOperations {

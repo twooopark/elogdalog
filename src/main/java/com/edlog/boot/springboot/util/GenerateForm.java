@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-import com.edlog.boot.springboot.builder.QueryBuilderTool;
+import com.edlog.boot.springboot.Service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 
 @Configuration
@@ -29,7 +28,7 @@ public class GenerateForm {
 	@Autowired
 	Query query;
 	@Autowired
-	QueryBuilderTool qbt;
+	QueryServiceImpl qb;
 	@Autowired
 	Aggregations aggs;
 
@@ -40,20 +39,20 @@ public class GenerateForm {
 
 	public int getLoginData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
-		QueryBuilder qb = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
-				.must(qbt.getTermQuery(fieldName, value));
-		SearchResponse sr = qbt.getSearchResponse(qb);
-		List<Map<String, Object>> list = qbt.getResponseAsList(sr);
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
+				.must(qb.getTermQuery(fieldName, value));
+		SearchResponse sr = qb.getSearchResponse(queryBuilder);
+		List<Map<String, Object>> list = qb.getResponseAsList(sr);
 		return list.size();
 	}
 
 	public Map<String, List<String>> getExcessiveAccess(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
 
-		QueryBuilder qb = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate));
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate));
 		TermsAggregationBuilder aggregation = AggregationBuilders.terms("eccess_id").field(fieldName);
 
-		SearchResponse sr = qbt.getSearchResponseIncludeAggs(qb, aggregation);
+		SearchResponse sr = qb.getSearchResponseIncludeAggs(queryBuilder, aggregation);
 
 		List<String> keyList = new ArrayList<String>();
 		List<String> docCountList = new ArrayList<String>();
