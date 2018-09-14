@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edlog.boot.springboot.Service.QueryServiceImpl;
+import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.util.Aggregations;
 import com.edlog.boot.springboot.util.Query;
 
