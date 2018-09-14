@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.edlog.boot.springboot.Service.QueryServiceImpl;
+import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;
@@ -30,26 +30,6 @@ public class HomeController {
 	@Autowired
 	GenerateForm gf;
 	
-	@RequestMapping("/")
-	public String home() {
-		return "login";
-	}
-	@RequestMapping("loginPage")
-	public String loginPage() {
-		return "login";
-	}
-	@RequestMapping("/homepage")
-	public String homepage() {
-		return "homepage";
-	}
-	@RequestMapping("/analyze")
-	public String analyze() {
-		return "analyze";
-	}
-	@RequestMapping("/document")
-	public String document() {
-		return "document";
-	}
 	@GetMapping("/test/{fieldName}/{value}")
 	public String test(@PathVariable final String fieldName,
 			@PathVariable final String value, Model model) throws UnknownHostException, ParseException {
