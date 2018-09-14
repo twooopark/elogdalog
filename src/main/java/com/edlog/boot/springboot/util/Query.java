@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-import com.edlog.boot.springboot.service.QueryServiceImpl;
-import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.service.QueryServiceImpl;
 
