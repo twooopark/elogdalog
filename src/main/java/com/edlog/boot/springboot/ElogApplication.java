@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @ComponentScan
 public class ElogApplication extends SpringBootServletInitializer{
-	
+	 
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(ElogApplication.class);
