@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.config.ESConfig;
+import com.edlog.boot.springboot.config.IpConfig;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;
 import com.edlog.boot.springboot.util.Query;
@@ -29,6 +30,8 @@ public class HomeController {
 	QueryServiceImpl qb;
 	@Autowired
 	GenerateForm gf;
+	@Autowired
+	IpConfig ipConfig;
 	
 	@GetMapping("/test/{fieldName}/{value}")
 	public String test(@PathVariable final String fieldName,
@@ -51,9 +54,10 @@ public class HomeController {
 	@GetMapping("/form")
 	public String form(Model model) throws ParseException, IOException {
 		String serviceName = "donutbook";
-		String startDate = "2018-08-10";
-		String endDate = "2018-08-20";
+		String startDate = "2018-08-13";
+		String endDate = "2018-08-15";
 		String fieldName = "action";
+		String fieldNameKeyword = "action.keyword";
 		
 				
 		//날짜 처리
@@ -90,10 +94,15 @@ public class HomeController {
 		}
 		//개인정보 다운로드 데이터 처리
 		int downloadCount = 0;
-		downloadCount = gf.getLoginData(serviceName, startDate, endDate, fieldName, "excelDownload");
+		downloadCount = gf.getKeywordData(serviceName, startDate, endDate, fieldName, "excelDownload");
 		
-		
-		//모델에 더하기
+		//access_ip 판단
+		Map<String, List<String>> ipListMap;
+		ipListMap = gf.getIpValidation(serviceName, startDate, endDate);
+		List<String> ipValidationList = ipListMap.get("countList");
+		List<String> externalIpList = ipListMap.get("externalIpList");
+		List<String> unAuthIpList = ipListMap.get("unAuthIpList");
+		//모델에 추가
 		model.addAttribute("date", date);
 		model.addAttribute("period", period);
 		model.addAttribute("accessTry", accessTry);
@@ -101,11 +110,20 @@ public class HomeController {
 		model.addAttribute("exAccessCount", keyListSize);
 		model.addAttribute("exAccessId", exText);
 		model.addAttribute("downloadCount", downloadCount);
-		
+		model.addAttribute("externalAccess", ipValidationList.get(0));
+		model.addAttribute("unAuthAccess", ipValidationList.get(1));
 		
 		System.out.println(accessTry +"/"+login_Y);
 		System.out.println(exText);
 		System.out.println(downloadCount);
 		return "test";
+	}
+	//ipConfig확인
+			
+	@GetMapping("/ip")
+	public String testIp() {
+		
+		
+		return null;
 	}
 }

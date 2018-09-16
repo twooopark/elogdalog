@@ -31,12 +31,19 @@ public class GenerateForm {
 	QueryServiceImpl qb;
 	@Autowired
 	Aggregations aggs;
+	@Autowired
+	IpValidationCheck ivcheck;
 
 	@Value("${my.properties.index}")
 	private String index;
 	@Value("${my.properties.type}")
 	private String type;
-
+	private int externalCount = 0;
+	private int unAuthCount = 0;
+	private List<String>externalIpList= new ArrayList<String>(); 
+	private List<String>unAuthIpList= new ArrayList<String>(); 
+	
+	//text데이터 리턴
 	public int getLoginData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
 		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
@@ -45,7 +52,52 @@ public class GenerateForm {
 		List<Map<String, Object>> list = qb.getResponseAsList(sr);
 		return list.size();
 	}
+	
+	//keyword데이터 리턴
+	public int getKeywordData(String serviceName, String startDate, String endDate, String fieldName, String value)
+			throws UnknownHostException {
+		fieldName = fieldName+".keyword";
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
+				.must(qb.getTermQuery(fieldName, value));
+		SearchResponse sr = qb.getSearchResponse(queryBuilder);
+		List<Map<String, Object>> list = qb.getResponseAsList(sr);
+		return list.size();
+	}
+	
+	//ip체크 결과 리턴
+	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate)
+			throws UnknownHostException {
 
+		Map<String, List<String>> listMap = new HashMap<String, List<String>>();
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate));
+		SearchResponse sr = qb.getSearchResponse(queryBuilder);
+		
+		List<Map<String, Object>> tempList = qb.getResponseAsList(sr);
+		List<String> countList = new ArrayList<String>();
+		
+		for(Map<String, Object> map : tempList) {
+			String tempIp = (String) map.get("access_ip");
+			
+			if(!ivcheck.checkOfficial(tempIp)) {
+				externalCount++;
+				externalIpList.add(tempIp);
+				if(!ivcheck.checkExternal(tempIp)) {
+					unAuthCount++;
+					unAuthIpList.add(tempIp);
+				}
+			}
+		}
+		countList.add(Integer.toString(externalCount));
+		countList.add(Integer.toString(unAuthCount));
+		
+		listMap.put("countList", countList);
+		listMap.put("externalIpList", externalIpList);
+		listMap.put("unAuthIpList", unAuthIpList);
+		
+		return listMap;
+	}
+
+	//과다조회 결과 리턴
 	public Map<String, List<String>> getExcessiveAccess(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
 

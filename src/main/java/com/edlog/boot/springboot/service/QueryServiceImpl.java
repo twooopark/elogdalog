@@ -27,6 +27,7 @@ public class QueryServiceImpl implements QueryService {
 	@Value("${my.properties.type}")
 	private String type;
 	
+
 	@Override
 	public QueryBuilder getMBoolQuery(QueryBuilder queryBuilder) {
 		QueryBuilder boolQuery = QueryBuilders.boolQuery().must(queryBuilder);
@@ -41,14 +42,14 @@ public class QueryServiceImpl implements QueryService {
 	
 	@Override
 	public QueryBuilder getSBoolQuery(QueryBuilder queryBuilder) {
-		// TODO Auto-generated method stub
-		return null;
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().should(queryBuilder);
+		return boolQuery;
 	}
 
 	@Override
 	public QueryBuilder getSSBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2) {
-		// TODO Auto-generated method stub
-		return null;
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().should(queryBuilder1).should(queryBuilder2);
+		return boolQuery;
 	}
 
 	@Override
@@ -104,9 +105,5 @@ public class QueryServiceImpl implements QueryService {
 		}
 		return list;
 	}
-
-	
-
-	
 
 }

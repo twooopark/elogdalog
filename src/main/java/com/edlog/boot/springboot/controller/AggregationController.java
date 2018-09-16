@@ -59,7 +59,6 @@ public class AggregationController {
 		List<String> keyList = keyMap.get("keyList");
 		List<String> docCountList = keyMap.get("docCountList");
 		
-		
 		//long hits = aggs.getHits(fieldName);
 		int keyListSize = keyList.size();
 		for(int i = 0; i < keyListSize; i++) {
