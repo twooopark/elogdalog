@@ -8,47 +8,6 @@
 	<link rel="stylesheet" href="resources/css/default.css">
 	<link rel="stylesheet" href="resources/css/home.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script>
-		$(function(){
-			$("#analysis").hover(function(){
-				$("#analyis_box_cover").css("background","rgba(0,0,0,0.7)");
-				$("#analysis img,#analysis h3").css("opacity","0.3");
-				$("#anlysis_detail").css("display","block");
-			},
-			function(){
-				$("#analyis_box_cover").css("background","rgba(255,255,255,0)");
-				$("#analysis img,#analysis h3").css("opacity","1");
-				$("#anlysis_detail").css("display","none");
-			});
-			
-
-			$("#document").hover(function(){
-				$("#document_box_cover").css("background","rgba(0,0,0,0.7)");
-				$("#document img,#document h3").css("opacity","0.3");
-				$("#document_detail").css("display","block");
-			},
-			function(){
-				$("#document_box_cover").css("background","rgba(255,255,255,0)");
-				$("#document img,#document h3").css("opacity","1");
-				$("#document_detail").css("display","none");
-			});
-
-			$("#visualization").hover(function(){
-				$("#visualization_box_cover").css("background","rgba(0,0,0,0.7)");
-				$("#visualization img,#visualization h3").css("opacity","0.3");
-				$("#visualization_detail").css("display","block");
-			},
-			function(){
-				$("#visualization_box_cover").css("background","rgba(255,255,255,0)");
-				$("#visualization img,#visualization h3").css("opacity","1");
-				$("#visualization_detail").css("display","none");
-			});
-		})
-		
-		function setting(){
-			alert("준비중입니다");
-		}
-	</script>
 </head>
 <body>
 	<!--HOMEPAGE-->
@@ -60,7 +19,7 @@
 					<a href="/homepage" class="logo"><img src="resources/images/logo.jpg" alt="logo"></a>
 					<ul class="nav_box">
 						<li><a href="/document">시작하기</a></li>
-						<li><a href="#" onclick="setting();return false;">설정</a></li>
+						<li><a href="/member/registration">등록</a></li>
 					</ul>
 				</div>
 			</header>
@@ -143,5 +102,42 @@
 		</div>
 		<!--푸터-->
 	</div>
+	<script>
+		$(function(){
+			$("#analysis").hover(function(){
+				$("#analyis_box_cover").css("background","rgba(0,0,0,0.7)");
+				$("#analysis img,#analysis h3").css("opacity","0.3");
+				$("#anlysis_detail").css("display","block");
+			},
+			function(){
+				$("#analyis_box_cover").css("background","rgba(255,255,255,0)");
+				$("#analysis img,#analysis h3").css("opacity","1");
+				$("#anlysis_detail").css("display","none");
+			});
+			
+
+			$("#document").hover(function(){
+				$("#document_box_cover").css("background","rgba(0,0,0,0.7)");
+				$("#document img,#document h3").css("opacity","0.3");
+				$("#document_detail").css("display","block");
+			},
+			function(){
+				$("#document_box_cover").css("background","rgba(255,255,255,0)");
+				$("#document img,#document h3").css("opacity","1");
+				$("#document_detail").css("display","none");
+			});
+
+			$("#visualization").hover(function(){
+				$("#visualization_box_cover").css("background","rgba(0,0,0,0.7)");
+				$("#visualization img,#visualization h3").css("opacity","0.3");
+				$("#visualization_detail").css("display","block");
+			},
+			function(){
+				$("#visualization_box_cover").css("background","rgba(255,255,255,0)");
+				$("#visualization img,#visualization h3").css("opacity","1");
+				$("#visualization_detail").css("display","none");
+			});
+		})
+	</script>
 </body>
 </html>

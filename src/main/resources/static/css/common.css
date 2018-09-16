@@ -1,0 +1,18 @@
+
+/*날짜 기간 선택 칸*/
+.mydatepicker {cursor: pointer;width: 250px;height: 35px; padding: 3px 10px;font-size: 1em;text-align: center;}
+
+/*일주일 간격 연/월/일 선택 칸*/
+.w_datepicker_year{width: 100px;height: 35px;font-size: 1em;text-align: center;padding: 3px 10px;}
+.w_datepicker_month{width: 100px;height: 35px;font-size: 1em;text-align: center;padding: 3px 10px;}
+.w_datepicker_week{width: 300px;height: 35px;font-size: 1em;text-align: center;padding: 3px 10px;}
+
+/*일주일 혹은 기간 선택 라디오 버튼 영역*/
+.datepicker_wrapper .pick_type_radio_wrapper {padding: 20px;}
+.datepicker_wrapper .pick_type_radio_wrapper input{padding: 10px}
+.datepicker_wrapper .pick_type_week{height: 60px}
+.datepicker_wrapper .pick_type_choice {height:60px;display: none;}
+.button_wrapper .datepicker_wrapper label{font-size: 1.4em;}
+
+/*조회 버튼*/
+.search_btn {position: absolute;right:0;font-size: 1.3em;line-height: 1.3em;text-align: center;height: 60px;padding: 0 20px;background: lightblue;}
