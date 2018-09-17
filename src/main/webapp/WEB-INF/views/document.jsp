@@ -329,7 +329,8 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 				data : json,
 				success : function(data) {
 					alert("전송완료");
-					alert(data);
+					var parse = JSON.parse(data)
+					alert(parse);
 				},
 				error : function(err){
 					alert("에러발생");

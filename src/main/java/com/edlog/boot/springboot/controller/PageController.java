@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -62,13 +63,12 @@ public class PageController {
 	}
 
 	@PostMapping("/document")
-	public String formmat(Model model, @RequestBody JSONObject json) throws ParseException, IOException {
+	public String formmat(Model model) throws ParseException, IOException, JSONException {
 		String serviceName = "donutbook";
 		String startDate = "2018-08-13";
 		String endDate = "2018-08-15";
 		String fieldName = "action";
-		String jsonToString = null;
-		System.out.println(json);
+		
 		
 //		try {
 //			jsonToString = json.get("data").toString();
