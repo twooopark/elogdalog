@@ -5,7 +5,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>홈페이지</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="/resources/css/home.css" />
 </head>
 <body>
 <%

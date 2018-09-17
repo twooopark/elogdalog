@@ -4,8 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="../resources/css/default.css">
-<link rel="stylesheet" href="../resources/css/login.css">
+<link rel="stylesheet" href="/resources/css/default.css">
+<link rel="stylesheet" href="/resources/css/login.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <title>로그인</title>
 </head>
@@ -22,7 +22,7 @@
 				</div>
 				<!-- login panel content wrapper to insert input form-->
 				<div class="form-wrapper">
-					<form action="/member/loginOK" id="loginForm">
+					<form id="loginForm" method="post">
 						<table>
 							<tr>
 								<td>
@@ -37,30 +37,36 @@
 							</tr>
 							<tr style="height:20px;"><td><span style="color:red" id="pwMsg"></span></td></tr>
 						</table>
+						<!--login panel submit wrapper-->
+						<div class="submit-wrapper">
+							<input type="submit" class="submit-button" value="로그인"/>
+						</div>
 					</form>
-				</div>
-				<!--login panel submit wrapper-->
-				<div class="submit-wrapper" id="idCheck">
-					<p>로그인</p>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
 	$(function(){
-		$("#idCheck").click(function(){
-			if($.trim($("#id").val())==""){
+		$("#loginForm").submit(function(){
+			console.log("asdf");
+			if($.trim($("#id").val())=="")
+			{
 				/*아이디 입력 하지 않음*/
 				$("#idMsg").text("아이디를 입력하세요");
-			}else{
+				return false;
+			}
+			else
+			{
 				/*패스워드 입력 하지 않음*/
 				if($.trim($("#password").val())==""){
 					$("#pwMsg").text("패스워드를 입력하세요");
+					return false;
 				}else{
 					/*로그인 로직 with Ajax*/
 					$.ajax({
 						url : "/member/loginCheck",
-						type : "POST",
+						type : "post",
 						data : { 	
 								id : $("#id").val(),
 								password : $("#password").val()
@@ -71,6 +77,7 @@
 								location.href="/homepage";
 							}else{
 								alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+								return false;
 							}
 						}
 					})
