@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.edlog.boot.springboot.DTO.DataDTO;
 import com.edlog.boot.springboot.DTO.FormDTO;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.config.IpConfig;
@@ -30,30 +35,25 @@ public class HomeController {
 	@Autowired
 	FormDTO formmat;
 	
-//	@GetMapping("/test/{fieldName}/{value}")
-//	public String test(@PathVariable final String fieldName,
-//			@PathVariable final String value, Model model) throws UnknownHostException, ParseException {
-//		
-//		List<Map<String, Object>> list =  query.getQResponse(fieldName, value);
-//		Map<String, Object> map = list.get(0);
-//		for (int i = 0; i < list.size(); i++) {
-//			System.out.println(list.get(i).get("conn_date"));
-//		}
-//		model.addAttribute("conn_id",map.get("conn_id"));
-//		model.addAttribute("conn_date",map.get("conn_date"));
-//		model.addAttribute("conn_ip",map.get("conn_ip"));
-//		model.addAttribute("action",map.get("action"));
-//		model.addAttribute("uri",map.get("uri"));
-//		
-//		//System.out.println(model.asMap());
-//		return "test";
-//	}
-	@GetMapping("/form")
-	public String form(Model model) throws ParseException, IOException {
+	@PostMapping("/formP")
+	@ResponseBody
+	public String formmat(Model model, @RequestBody DataDTO data ) throws ParseException, IOException, JSONException {
 		String serviceName = "donutbook";
 		String startDate = "2018-08-13";
 		String endDate = "2018-08-15";
 		String fieldName = "action";
+		
+		System.out.println(data);
+//		"startDate" : startDate,
+//		"endDate" : endDate,
+//		"serviceName" : serviceName
+		
+//		try {
+//			jsonToString = json.get("data").toString();
+//			System.out.println(jsonToString);
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
 		
 		//날짜 처리
 		String lastMonday = GetDate.getCurMonday();
@@ -102,7 +102,11 @@ public class HomeController {
 		int overtimeAccess = 0;
 		overtimeAccess = gf.getScriptData(serviceName, startDate, endDate);
 		
-		//formmat 객체에 추가 후 모델에 formmat추가
+		//serviceList 얻기
+		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
+				
+		
+		//formmat 객체에 변수 셋팅
 		formmat.setDate(date);
 		formmat.setPeriod(period);
 		formmat.setAccessTry(accessTry);
@@ -116,9 +120,21 @@ public class HomeController {
 		formmat.setUnAuthIpList(unAuthIpList);
 		formmat.setOvertimeAccess(overtimeAccess);
 		
-		model.addAttribute("formmat", formmat);
 		
-		return "test";
+		//model에 값 전달
+		model.addAttribute("formmat", formmat);
+		model.addAttribute("serviceList", serviceList);
+		model.addAttribute("serviceListSize", serviceList.size());
+		return "document";
+	}
+	
+	@GetMapping("/form")
+	public String doc(Model model) {
+		//serviceList 얻기
+		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
+		model.addAttribute("serviceList", serviceList);
+		model.addAttribute("serviceListSize", serviceList.size());
+		return "document";
 	}
 	
 }

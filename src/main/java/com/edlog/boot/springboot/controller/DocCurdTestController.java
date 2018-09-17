@@ -45,8 +45,7 @@ public class DocCurdTestController {
 			return "만드는데 실패했습니다";
 		}
 		
-		
-		//createIndex와 같음 기본세팅 추가로 할수 있음
+//createIndex와 같음 기본세팅 추가로 할수 있음
 //		CreateIndexResponse cir = client.admin().indices().prepareCreate(index)
 //        .setSettings(Settings.builder()             
 //                .put("index.number_of_shards", 3)

@@ -21,25 +21,25 @@ public class ESConfig {
 	private String clusterName;
 	@Value("${spring.elasticsearch.host}")
 	private String host;
+	@Value("${spring.elasticsearch.host2}")
+	private String host2;
 	@Value("${spring.elasticsearch.port}")
 	private String port;
 	
 	@SuppressWarnings("resource")
 	public Client client() throws UnknownHostException {
 		
-
-		
 		Settings settings = Settings.builder()
 				.put("cluster.name", clusterName)
 				.put("client.transport.sniff", true) //True로 설정시 클러스터 연결 후 위상 재구성해 다른 노드의 주소를 얻음
-				.put("client.transport.ignore_cluster_name", false)
-				.build(); // 클러스터 이름이 다를경우 연결 x
+				.put("client.transport.ignore_cluster_name", true) // 클러스터 이름이 다를경우 연결 x
+				.build(); 
 		Client client = null;
 
 		try {
 			client = new PreBuiltTransportClient(settings)
 					.addTransportAddress(new TransportAddress(InetAddress.getByName(host), Integer.parseInt(port)))
-					.addTransportAddress(new TransportAddress(InetAddress.getByName("0.0.0.0"), Integer.parseInt(port)));
+					.addTransportAddress(new TransportAddress(InetAddress.getByName(host2), Integer.parseInt(port)));
 		} catch (Exception e) {
 			System.out.println(e);
 		}

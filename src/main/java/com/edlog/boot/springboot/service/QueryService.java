@@ -1,29 +1,26 @@
 package com.edlog.boot.springboot.service;
 
-import java.util.List;
-import java.util.Map;
-
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
-import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 
 public interface QueryService {
-	
+	//formmat위한 기초 쿼리
 	public QueryBuilder formFilter(String serviceName, String startDate, String endDate);
-	public QueryBuilder getMBoolQuery(QueryBuilder queryBuilder);
-	public QueryBuilder getMnBoolQuery(QueryBuilder queryBuilder);
-	public QueryBuilder getMMBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2);
-	public QueryBuilder getMMnBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2);
-	public QueryBuilder getSBoolQuery(QueryBuilder queryBuilder);
-	public QueryBuilder getSSBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2);
+	//Must
+	public QueryBuilder getMBoolQuery(QueryBuilder mustQuery);
+	//MustNot
+	public QueryBuilder getMnBoolQuery(QueryBuilder mustNotQuery);
+	//Must Must
+	public QueryBuilder getMMBoolQuery(QueryBuilder mustQuery1, QueryBuilder mustQuery2);
+	//Must MustNot
+	public QueryBuilder getMMnBoolQuery(QueryBuilder mustQuery, QueryBuilder mustNotQuery);
+	//Should
+	public QueryBuilder getSBoolQuery(QueryBuilder shouldQuery);
+	//Should Should
+	public QueryBuilder getSSBoolQuery(QueryBuilder shouldQuery1, QueryBuilder shouldQuery2);
+	//날짜 범주 쿼리
 	public QueryBuilder getDateRange(String startDate, String endDate);
+	//Term일치 쿼리
 	public QueryBuilder getTermQuery(String fieldName, String value);
-	public TermsAggregationBuilder getTermsAggregation(String aggsName, String fieldName);
-	public SearchResponse getSearchResponse(QueryBuilder query);
-	public SearchResponse getSearchResponseWithAggs(AggregationBuilder aggs);
-	public SearchResponse getSearchResponseIncludeAggs(QueryBuilder query, AggregationBuilder aggs);
-	public List<Map<String, Object>> getResponseAsList(SearchResponse sr);
-	public Map<String, List<String>> getBucketAsMap(SearchResponse sr, String aggsName);
+	
 	
 }

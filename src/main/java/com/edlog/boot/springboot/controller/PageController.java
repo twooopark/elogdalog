@@ -5,13 +5,11 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.edlog.boot.springboot.DTO.DataDTO;
 import com.edlog.boot.springboot.DTO.FormDTO;
 import com.edlog.boot.springboot.DTO.MemberDTO;
 import com.edlog.boot.springboot.service.MemberService;
@@ -33,6 +32,7 @@ import com.edlog.boot.springboot.util.GetDate;
  */
 @Controller
 public class PageController {
+	
 	@Autowired
 	GenerateForm gf;
 	@Autowired
@@ -44,13 +44,13 @@ public class PageController {
 
 	@RequestMapping("/")
 	public String home() {
-		return "login";
+		return "member/login";
 	}
 
-	@RequestMapping("/loginPage")
-	public String loginPage() {
-		return "login";
-	}
+//	@RequestMapping("/loginPage")
+//	public String loginPage() {
+//		return "member/login";
+//	}
 
 	@RequestMapping("/homepage")
 	public String homepage() {
@@ -61,14 +61,32 @@ public class PageController {
 	public String analyze() {
 		return "analyze";
 	}
+	
+//
+//	RequestMapping("/document")
+//	@ResponseBody
+//	public String formmatpost(Model model, @RequestBody DataDTO data ) throws ParseException, IOException, JSONException {
+//		String serviceName = "donutbook";
+//		String startDate = "2018-08-13";
+//		String endDate = "2018-08-15";
+//		String fieldName = "action";
+//		
+//		System.out.println(data);
+//		return "document";
+//	}
 
 	@PostMapping("/document")
-	public String formmat(Model model) throws ParseException, IOException, JSONException {
+	@ResponseBody
+	public String formmat(Model model, @RequestBody DataDTO data ) throws ParseException, IOException, JSONException {
 		String serviceName = "donutbook";
 		String startDate = "2018-08-13";
 		String endDate = "2018-08-15";
 		String fieldName = "action";
 		
+		System.out.println(data);
+//		"startDate" : startDate,
+//		"endDate" : endDate,
+//		"serviceName" : serviceName
 		
 //		try {
 //			jsonToString = json.get("data").toString();

@@ -1,14 +1,36 @@
+server:
+  port: 11311
+  servlet:
+    jsp:
+      init-parameters:
+        development: true
+  
 spring:
   elasticsearch:
-     cluster-name: MyElastic
-     host: 127.0.0.1
-     port : 9300
+#    cluster-name: MyElastic
+#    host: 127.0.0.1
+    port : 9300
+    cluster-name: Elog_application
+    host: 175.115.95.93
+    host2: 175.21.25.77
+    
+    
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+    static-path-pattern: /resources/**
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://175.115.95.22:3306/project1
+    username: websvc1
+    password: websvc1
+        
 
 my:
   properties: 
      index: elog_index_2018.09.13
      type: elog_doctype
-     aggs: aggsName
 
 check:
   ip:

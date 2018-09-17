@@ -11,17 +11,15 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.filter.Filters;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import com.edlog.boot.springboot.config.ESConfig;
+import com.edlog.boot.springboot.service.AggregationServiceImpl;
 import com.edlog.boot.springboot.service.QueryServiceImpl;
+import com.edlog.boot.springboot.service.ResponseServiceImpl;
 
 @Configuration
 public class GenerateForm {
@@ -29,9 +27,11 @@ public class GenerateForm {
 	@Autowired
 	ESConfig esConfig;
 	@Autowired
-	QueryServiceImpl qb;
+	QueryServiceImpl qs;
 	@Autowired
-	Aggregations aggs;
+	AggregationServiceImpl as;
+	@Autowired
+	ResponseServiceImpl rs;
 	@Autowired
 	IpValidationCheck ivcheck;
 
@@ -47,10 +47,10 @@ public class GenerateForm {
 	// text데이터 리턴
 	public int getTextData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
-		QueryBuilder queryBuilder = qb.getMMBoolQuery(qb.formFilter(serviceName, startDate, endDate),
-				qb.getTermQuery(fieldName, value));
-		SearchResponse sr = qb.getSearchResponse(queryBuilder);
-		List<Map<String, Object>> list = qb.getResponseAsList(sr);
+		QueryBuilder queryBuilder = qs.getMMBoolQuery(qs.formFilter(serviceName, startDate, endDate),
+				qs.getTermQuery(fieldName, value));
+		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
+		List<Map<String, Object>> list = rs.getResponseAsList(sr);
 		return list.size();
 	}
 
@@ -58,30 +58,30 @@ public class GenerateForm {
 	public int getKeywordData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
 		fieldName = fieldName + ".keyword";
-		QueryBuilder queryBuilder = qb.getMMBoolQuery(qb.formFilter(serviceName, startDate, endDate),
-				qb.getTermQuery(fieldName, value));
-		SearchResponse sr = qb.getSearchResponse(queryBuilder);
-		List<Map<String, Object>> list = qb.getResponseAsList(sr);
+		QueryBuilder queryBuilder = qs.getMMBoolQuery(qs.formFilter(serviceName, startDate, endDate),
+				qs.getTermQuery(fieldName, value));
+		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
+		List<Map<String, Object>> list = rs.getResponseAsList(sr);
 		return list.size();
 	}
 
 	// script데이터 리턴
 	public int getScriptData(String serviceName, String startDate, String endDate)
 			throws UnknownHostException {
-		QueryBuilder queryBuilder = qb.getMMnBoolQuery(qb.formFilter(serviceName, startDate, endDate), 
+		QueryBuilder queryBuilder = qs.getMMnBoolQuery(qs.formFilter(serviceName, startDate, endDate), 
 				QueryBuilders.scriptQuery(new Script("doc.access_date.date.getHourOfDay() >= 8  "
 						+ "&& doc.access_date.date.getHourOfDay() < 19 && doc.access_date.date.getDayOfWeek() < 6")));
 
-		SearchResponse sr = qb.getSearchResponse(queryBuilder);
-		List<Map<String, Object>> list = qb.getResponseAsList(sr);
+		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
+		List<Map<String, Object>> list = rs.getResponseAsList(sr);
 		return list.size();
 	}
 	// ServiceNameList 리턴
 	public Map<String, List<String>> getServiceList(String fieldName) {
-		TermsAggregationBuilder aggregation = qb.getTermsAggregation("service", fieldName);
-		SearchResponse sr = qb.getSearchResponseWithAggs(aggregation);
+		TermsAggregationBuilder aggregation = as.getTermsAggregation("service", fieldName);
+		SearchResponse sr = rs.getSearchResponseWithAggs(aggregation);
 		
-		Map<String, List<String>> map = qb.getBucketAsMap(sr, "service");
+		Map<String, List<String>> map = rs.getBucketAsMap(sr, "service");
 		return map;
 	}
 
@@ -90,10 +90,10 @@ public class GenerateForm {
 			throws UnknownHostException {
 
 		Map<String, List<String>> listMap = new HashMap<String, List<String>>();
-		QueryBuilder queryBuilder = qb.getMBoolQuery(qb.formFilter(serviceName, startDate, endDate));
-		SearchResponse sr = qb.getSearchResponse(queryBuilder);
+		QueryBuilder queryBuilder = qs.getMBoolQuery(qs.formFilter(serviceName, startDate, endDate));
+		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
 
-		List<Map<String, Object>> tempList = qb.getResponseAsList(sr);
+		List<Map<String, Object>> tempList = rs.getResponseAsList(sr);
 		List<String> countList = new ArrayList<String>();
 
 		for (Map<String, Object> map : tempList) {
@@ -122,12 +122,12 @@ public class GenerateForm {
 	public Map<String, List<String>> getExcessiveAccess(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
 
-		QueryBuilder queryBuilder = qb.getMBoolQuery(qb.formFilter(serviceName, startDate, endDate));
-		TermsAggregationBuilder aggregation = qb.getTermsAggregation("accessId", fieldName);
+		QueryBuilder queryBuilder = qs.getMBoolQuery(qs.formFilter(serviceName, startDate, endDate));
+		TermsAggregationBuilder aggregation = as.getTermsAggregation("accessId", fieldName);
 
-		SearchResponse sr = qb.getSearchResponseIncludeAggs(queryBuilder, aggregation);
+		SearchResponse sr = rs.getSearchResponseIncludeAggs(queryBuilder, aggregation);
 
-		Map<String, List<String>> map = qb.getBucketAsMap(sr, "accessId");
+		Map<String, List<String>> map = rs.getBucketAsMap(sr, "accessId");
 		
 		return map;
 	}

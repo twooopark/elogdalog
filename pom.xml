@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.edlog.boot</groupId>
-	<artifactId>ELOG</artifactId>
+	<artifactId>elogdalog</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>ELOG</name>
+	<name>elogdalog</name>
 	<description>SpringBoot</description>
 
 	<parent>

@@ -20,6 +20,7 @@ import com.edlog.boot.springboot.service.MemberService;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
+	
 	@Autowired MemberService memberService;
 	@Autowired HttpSession session;
 	

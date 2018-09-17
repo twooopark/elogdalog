@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FormDTO implements Serializable {
-	
-	
+
 	private String date;
 	private String period;
 	private int accessTry;
