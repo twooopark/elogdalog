@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edlog.boot.springboot.model.MemberDTO;
+import com.edlog.boot.springboot.DTO.MemberDTO;
 import com.edlog.boot.springboot.service.DbService;
 import com.edlog.boot.springboot.service.MemberService;
 /**
@@ -29,8 +29,9 @@ public class PageController {
 	@RequestMapping("/analyze")public String analyze() {return "analyze";}
 	@RequestMapping("/document")public String document() {return "document";}
 	
-	@RequestMapping("/login")
+	@RequestMapping("/loginOK")
 	public String loginCheck(MemberDTO member, HttpServletResponse response) {
+		
 		return "homepage";
 	}
 	
