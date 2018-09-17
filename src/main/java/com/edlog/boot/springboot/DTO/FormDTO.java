@@ -92,7 +92,7 @@ public class FormDTO implements Serializable {
 		this.exAccessId = exAccessId;
 	}
 	
-	public String getDownloadCount() {
+	public int getDownloadCount() {
 		return downloadCount;
 	}
 	
