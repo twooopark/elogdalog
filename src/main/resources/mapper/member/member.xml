@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edlog.boot.springboot.DAO.MemberMapper">
+	<select id="getDual" resultType="java.lang.String">
+        SELECT NOW() FROM DUAL
+    </select>
+    
+    <insert id="newRegit" parameterType="com.edlog.boot.springboot.DTO.MemberDTO">
+    	INSERT INTO member values (#{id},#{password},#{name})
+    </insert>
+    
+    <select id="loginCheck" parameterType="com.edlog.boot.springboot.DTO.MemberDTO" resultType="com.edlog.boot.springboot.DTO.MemberDTO">
+    	select * from member where id=#{id}
+    </select>
+    
+</mapper>
