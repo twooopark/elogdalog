@@ -59,7 +59,6 @@ public class AggregationController {
 		List<String> keyList = keyMap.get("keyList");
 		List<String> docCountList = keyMap.get("docCountList");
 		
-		
 		//long hits = aggs.getHits(fieldName);
 		int keyListSize = keyList.size();
 		for(int i = 0; i < keyListSize; i++) {
@@ -155,7 +154,7 @@ public class AggregationController {
 	@GetMapping("/formTest")
 	public String formTest() throws UnknownHostException {
 		
-		SearchResponse sr = qb.getSearchResponse(query.formQuery("unicro", "2018-08-10", "2018-08-20"));
+		SearchResponse sr = qb.getSearchResponse(qb.formFilter("unicro", "2018-08-10", "2018-08-20"));
 		List<Map<String, Object>> formList = qb.getResponseAsList(sr);
 		int formListSize = formList.size();
 		System.out.println(formListSize);

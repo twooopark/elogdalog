@@ -114,17 +114,6 @@ public class Query {
 
 		return sr.getHits().getTotalHits();
 	}
-
-	//선택한 날짜에 해당하는 서비스별 선택 쿼리
-	public QueryBuilder formQuery(String serviceName, String startDate, String endDate) throws UnknownHostException {
-
-		serviceName = serviceName.toLowerCase();
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-				.must(qb.getDateRange(startDate, endDate))
-				.must(qb.getTermQuery("service", serviceName));
-
-		return queryBuilder;
-	}
 	
 	public List<Map<String, String>> DateToList(List<Map<String, Object>> list) {
 		Map<String, String> parsedMap = new HashMap<String, String>();

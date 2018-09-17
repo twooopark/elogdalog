@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,32 +29,53 @@ public class QueryServiceImpl implements QueryService {
 	private String type;
 	
 	@Override
+	public QueryBuilder formFilter(String serviceName, String startDate, String endDate) {
+		serviceName = serviceName.toLowerCase();
+		QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+				.must(getDateRange(startDate, endDate))
+				.must(getTermQuery("service", serviceName));
+		return queryBuilder;
+	}
+	
+	@Override
 	public QueryBuilder getMBoolQuery(QueryBuilder queryBuilder) {
 		QueryBuilder boolQuery = QueryBuilders.boolQuery().must(queryBuilder);
 		return boolQuery;
 	}
-	
+
+	@Override
+	public QueryBuilder getMnBoolQuery(QueryBuilder queryBuilder) {
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().mustNot(queryBuilder);
+		return boolQuery;
+	}
+
 	@Override
 	public QueryBuilder getMMBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2) {
 		QueryBuilder boolQuery = QueryBuilders.boolQuery().must(queryBuilder1).must(queryBuilder2);
 		return boolQuery;
 	}
+
+	@Override
+	public QueryBuilder getMMnBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2) {
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().must(queryBuilder1).mustNot(queryBuilder2);
+		return boolQuery;
+	}
 	
 	@Override
 	public QueryBuilder getSBoolQuery(QueryBuilder queryBuilder) {
-		// TODO Auto-generated method stub
-		return null;
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().should(queryBuilder);
+		return boolQuery;
 	}
 
 	@Override
 	public QueryBuilder getSSBoolQuery(QueryBuilder queryBuilder1, QueryBuilder queryBuilder2) {
-		// TODO Auto-generated method stub
-		return null;
+		QueryBuilder boolQuery = QueryBuilders.boolQuery().should(queryBuilder1).should(queryBuilder2);
+		return boolQuery;
 	}
 
 	@Override
-	public AggregationBuilder getAggregation(String aggsName, String fieldName) {
-		AggregationBuilder aggsBuilder = AggregationBuilders.terms(aggsName).field(fieldName);
+	public TermsAggregationBuilder getTermsAggregation(String aggsName, String fieldName) {
+		TermsAggregationBuilder aggsBuilder = AggregationBuilders.terms(aggsName).field(fieldName);
 		return aggsBuilder;
 	}
 	@Override
@@ -104,9 +126,5 @@ public class QueryServiceImpl implements QueryService {
 		}
 		return list;
 	}
-
-	
-
-	
 
 }
