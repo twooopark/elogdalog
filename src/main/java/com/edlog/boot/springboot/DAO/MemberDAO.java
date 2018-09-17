@@ -1,4 +1,4 @@
-package com.edlog.boot.springboot.model;
+package com.edlog.boot.springboot.DAO;
 
 import org.springframework.stereotype.Repository;
 
