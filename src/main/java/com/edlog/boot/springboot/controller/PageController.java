@@ -5,14 +5,12 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edlog.boot.springboot.DTO.DataDTO;
 import com.edlog.boot.springboot.DTO.FormDTO;
-import com.edlog.boot.springboot.DTO.MemberDTO;
-import com.edlog.boot.springboot.service.MemberService;
+import com.edlog.boot.springboot.service.MemberServiceImpl;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;
 
@@ -38,7 +35,7 @@ public class PageController {
 	@Autowired
 	FormDTO formmat;
 	@Autowired
-	MemberService Mservice;
+	MemberServiceImpl Mservice;
 	@Autowired
 	HttpSession session;
 
@@ -46,7 +43,6 @@ public class PageController {
 	public String home() {
 		return "member/login";
 	}
-
 //	@RequestMapping("/loginPage")
 //	public String loginPage() {
 //		return "member/login";
@@ -167,26 +163,5 @@ public class PageController {
 		model.addAttribute("serviceListSize", serviceList.size());
 		return "document";
 	}
-	
-	@GetMapping("/document")
-	public String doc(Model model) {
-		//serviceList 얻기
-		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
-		model.addAttribute("serviceList", serviceList);
-		model.addAttribute("serviceListSize", serviceList.size());
-		return "document";
-	}
 
-	@RequestMapping("/loginOK")
-	public String loginCheck(MemberDTO member, HttpServletResponse response) {
-
-		return "homepage";
-	}
-
-	@RequestMapping("/signup")
-	public String signup(MemberDTO member, HttpServletResponse response) {
-		return "";
-	}
-	
-	
 }

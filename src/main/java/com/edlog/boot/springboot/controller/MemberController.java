@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.edlog.boot.springboot.DTO.MemberDTO;
-import com.edlog.boot.springboot.service.MemberService;
+import com.edlog.boot.springboot.service.MemberServiceImpl;
 
 /**
  * 
@@ -21,13 +21,8 @@ import com.edlog.boot.springboot.service.MemberService;
 @RequestMapping("/member")
 public class MemberController {
 	
-	@Autowired MemberService memberService;
+	@Autowired MemberServiceImpl memberService;
 	@Autowired HttpSession session;
-	
-	@RequestMapping("/loginPage")
-	public String loginPage() {
-		return "member/login";
-	}
 	
 	@RequestMapping(value="/loginCheck")
 	public void loginOK(MemberDTO member,HttpServletResponse response) throws Exception {

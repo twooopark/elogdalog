@@ -1,24 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/common/common.jsp"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
 	<title>GRAPH</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src='https://cdn.bootcss.com/air-datepicker/2.2.3/js/datepicker.min.js'></script>
-	<script src='https://cdn.bootcss.com/air-datepicker/2.2.3/js/i18n/datepicker.en.min.js'></script>
-	<script type="text/javascript" src="resources/js/weekpicker.js"></script>
-	<script type="text/javascript" src="resources/js/datepicker.js"></script>
-	<script type="text/javascript" src="resources/js/initservicepage.js"></script>
-	
-	<link rel='stylesheet' href='https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-	<link rel='stylesheet' href='https://cdn.bootcss.com/air-datepicker/2.2.3/css/datepicker.min.css'>
-	
-	<link rel="stylesheet" type="text/css" href="resources/css/template.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/common.css">
-	<link rel="stylesheet" href="resources/css/default.css">
-	<link rel="stylesheet" href="resources/css/analyze.css">
+	<link rel="stylesheet" href="/resources/css/analyze.css">
 </head>
 <body>
 <%
@@ -29,17 +16,7 @@
 	<!--HOMEPAGE-->
 	<div class="home_wrapper">
 		<!--헤더-->
-		<div class="header_wrapper">
-			<header>
-				<div class="top_menu">
-					<a href="/homepage" class="logo"><img src="resources/images/logo.jpg" alt="logo"></a>
-					<ul class="nav_box">
-						<li><a href="/document">시작하기</a></li>
-						<li><a href="/member/registration">등록</a></li>
-					</ul>
-				</div>
-			</header>
-		</div>
+		<jsp:include page="/WEB-INF/views/frame/header.jsp" flush="false"/>
 		<!--헤더-->
 
 		<!--내용-->
@@ -91,7 +68,6 @@
 						</div>
 					</div>
 				<div class="iframe_wrapper">
-					
 				
 				</div>
 			</div>		
@@ -99,11 +75,7 @@
 		<!--내용-->
 
 		<!--푸터-->
-		<div class="footer_wrapper">
-			<footer class="footer">
-				<a href="/homepage" id="footer_logo"><img src="resources/images/footer_logo.jpg" alt="푸터로고"></a>
-			</footer>
-		</div>
+		<jsp:include page="/WEB-INF/views/frame/footer.jsp" flush="false"/>
 		<!--푸터-->
 	</div>
 	<script type="text/javascript">

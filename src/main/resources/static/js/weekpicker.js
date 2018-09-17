@@ -53,7 +53,7 @@ function makeWeekSelectOptions() {
             seled = stxt+"|"+etxt;
         }
  
-        obj.options[obj.options.length] = new Option(stxt+"~"+etxt, stxt+"|"+etxt);
+        obj.options[obj.options.length] = new Option(stxt+"~"+etxt, stxt+"~"+etxt);
  
         sdate = new Date(edate.getFullYear(), edate.getMonth(), edate.getDate() + 1);
         edate = new Date(sdate.getFullYear(), sdate.getMonth(), sdate.getDate());
