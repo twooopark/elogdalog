@@ -1,7 +1,6 @@
 package com.edlog.boot.springboot.controller;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -10,56 +9,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.edlog.boot.springboot.service.QueryServiceImpl;
+import com.edlog.boot.springboot.DTO.FormDTO;
 import com.edlog.boot.springboot.config.ESConfig;
 import com.edlog.boot.springboot.config.IpConfig;
+import com.edlog.boot.springboot.service.QueryServiceImpl;
 import com.edlog.boot.springboot.util.GenerateForm;
 import com.edlog.boot.springboot.util.GetDate;
-import com.edlog.boot.springboot.util.Query;
 
 @Controller
 public class HomeController {
 	@Autowired
 	ESConfig esConfig;
 	@Autowired
-	Query query;
-	@Autowired
 	QueryServiceImpl qb;
 	@Autowired
 	GenerateForm gf;
 	@Autowired
 	IpConfig ipConfig;
+	@Autowired
+	FormDTO formmat;
 	
-	@GetMapping("/test/{fieldName}/{value}")
-	public String test(@PathVariable final String fieldName,
-			@PathVariable final String value, Model model) throws UnknownHostException, ParseException {
-		
-		List<Map<String, Object>> list =  query.getQResponse(fieldName, value);
-		Map<String, Object> map = list.get(0);
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i).get("conn_date"));
-		}
-		model.addAttribute("conn_id",map.get("conn_id"));
-		model.addAttribute("conn_date",map.get("conn_date"));
-		model.addAttribute("conn_ip",map.get("conn_ip"));
-		model.addAttribute("action",map.get("action"));
-		model.addAttribute("uri",map.get("uri"));
-		
-		//System.out.println(model.asMap());
-		return "test";
-	}
+//	@GetMapping("/test/{fieldName}/{value}")
+//	public String test(@PathVariable final String fieldName,
+//			@PathVariable final String value, Model model) throws UnknownHostException, ParseException {
+//		
+//		List<Map<String, Object>> list =  query.getQResponse(fieldName, value);
+//		Map<String, Object> map = list.get(0);
+//		for (int i = 0; i < list.size(); i++) {
+//			System.out.println(list.get(i).get("conn_date"));
+//		}
+//		model.addAttribute("conn_id",map.get("conn_id"));
+//		model.addAttribute("conn_date",map.get("conn_date"));
+//		model.addAttribute("conn_ip",map.get("conn_ip"));
+//		model.addAttribute("action",map.get("action"));
+//		model.addAttribute("uri",map.get("uri"));
+//		
+//		//System.out.println(model.asMap());
+//		return "test";
+//	}
 	@GetMapping("/form")
 	public String form(Model model) throws ParseException, IOException {
 		String serviceName = "donutbook";
 		String startDate = "2018-08-13";
 		String endDate = "2018-08-15";
 		String fieldName = "action";
-		String fieldNameKeyword = "action.keyword";
 		
-				
 		//날짜 처리
 		String lastMonday = GetDate.getCurMonday();
 		String lastSunday = GetDate.getCurSunday();
@@ -67,30 +62,30 @@ public class HomeController {
 		String date = GetDate.getCurDay();
 	
 		//로그인 데이터 처리
-		int login_Y = 0;
-		int login_N = 0;
+		int loginY = 0;
+		int loginN = 0;
 		int accessTry = 0;
-		login_Y = gf.getLoginData(serviceName, startDate, endDate, fieldName, "login_y");
-		login_N = gf.getLoginData(serviceName, startDate, endDate, fieldName, "login_n");
-		accessTry = login_N + login_Y;
+		loginY = gf.getTextData(serviceName, startDate, endDate, fieldName, "login_y");
+		loginN = gf.getTextData(serviceName, startDate, endDate, fieldName, "login_n");
+		accessTry = loginN + loginY;
 		
 		//과다 조회 데이터 처리
 		Map<String, List<String>> exAccess = gf.getExcessiveAccess(serviceName, startDate, endDate,"access_id.keyword");
 		List<String> keyList = null;
 		List<String> docCountList = null;
-		String keyListSize = null;
-		String exText = "";
+		String exAccessCount = null;
+		String exAccessId = "";
 		
 		if(!exAccess.isEmpty()) {
 			keyList = exAccess.get("keyList");
 			docCountList = exAccess.get("docCountList");
-			keyListSize = Integer.toString(keyList.size());
+			exAccessCount = Integer.toString(keyList.size());
 			for(int i = 0; i < keyList.size(); i++) {
-				exText += keyList.get(i) + "(" + docCountList.get(i) + "회)<br/>";
+				exAccessId += keyList.get(i) + "(" + docCountList.get(i) + "회)<br/>";
 			}
 		} else {
-			keyListSize = "0";
-			exText = "내역 없음";
+			exAccessCount = "0";
+			exAccessId = "내역 없음";
 		}
 		//개인정보 다운로드 데이터 처리
 		int downloadCount = 0;
@@ -102,20 +97,27 @@ public class HomeController {
 		List<String> ipValidationList = ipListMap.get("countList");
 		List<String> externalIpList = ipListMap.get("externalIpList");
 		List<String> unAuthIpList = ipListMap.get("unAuthIpList");
-		//모델에 추가
-		model.addAttribute("date", date);
-		model.addAttribute("period", period);
-		model.addAttribute("accessTry", accessTry);
-		model.addAttribute("login_Y", login_Y);
-		model.addAttribute("exAccessCount", keyListSize);
-		model.addAttribute("exAccessId", exText);
-		model.addAttribute("downloadCount", downloadCount);
-		model.addAttribute("externalAccess", ipValidationList.get(0));
-		model.addAttribute("unAuthAccess", ipValidationList.get(1));
 		
-		System.out.println(accessTry +"/"+login_Y);
-		System.out.println(exText);
-		System.out.println(downloadCount);
+		//근무시간 외 접근 판단
+		int overtimeAccess = 0;
+		overtimeAccess = gf.getScriptData(serviceName, startDate, endDate);
+		
+		//모델에 추가
+		formmat.setDate(date);
+		formmat.setPeriod(period);
+		formmat.setAccessTry(accessTry);
+		formmat.setLoginY(loginY);
+		formmat.setExAccessCount(exAccessCount);
+		formmat.setExAccessId(exAccessId);
+		formmat.setDownloadCount(downloadCount);
+		formmat.setExternalAccess(ipValidationList.get(0));
+		formmat.setUnAuthAccess(ipValidationList.get(1));
+		formmat.setExternalIpList(externalIpList);
+		formmat.setUnAuthIpList(unAuthIpList);
+		formmat.setOvertimeAccess(overtimeAccess);
+		
+		model.addAttribute("formmat", formmat);
+		
 		return "test";
 	}
 	//ipConfig확인

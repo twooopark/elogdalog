@@ -10,8 +10,11 @@ import java.util.Map;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.script.Script;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.filter.Filters;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +29,6 @@ public class GenerateForm {
 	@Autowired
 	ESConfig esConfig;
 	@Autowired
-	Query query;
-	@Autowired
 	QueryServiceImpl qb;
 	@Autowired
 	Aggregations aggs;
@@ -40,48 +41,60 @@ public class GenerateForm {
 	private String type;
 	private int externalCount = 0;
 	private int unAuthCount = 0;
-	private List<String>externalIpList= new ArrayList<String>(); 
-	private List<String>unAuthIpList= new ArrayList<String>(); 
-	
-	//text데이터 리턴
-	public int getLoginData(String serviceName, String startDate, String endDate, String fieldName, String value)
+	private List<String> externalIpList = new ArrayList<String>();
+	private List<String> unAuthIpList = new ArrayList<String>();
+
+	// text데이터 리턴
+	public int getTextData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
-				.must(qb.getTermQuery(fieldName, value));
+		QueryBuilder queryBuilder = qb.getMMBoolQuery(qb.formFilter(serviceName, startDate, endDate),
+				qb.getTermQuery(fieldName, value));
 		SearchResponse sr = qb.getSearchResponse(queryBuilder);
 		List<Map<String, Object>> list = qb.getResponseAsList(sr);
 		return list.size();
 	}
-	
-	//keyword데이터 리턴
+
+	// keyword데이터 리턴
 	public int getKeywordData(String serviceName, String startDate, String endDate, String fieldName, String value)
 			throws UnknownHostException {
-		fieldName = fieldName+".keyword";
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate))
-				.must(qb.getTermQuery(fieldName, value));
+		fieldName = fieldName + ".keyword";
+		QueryBuilder queryBuilder = qb.getMMBoolQuery(qb.formFilter(serviceName, startDate, endDate),
+				qb.getTermQuery(fieldName, value));
 		SearchResponse sr = qb.getSearchResponse(queryBuilder);
 		List<Map<String, Object>> list = qb.getResponseAsList(sr);
 		return list.size();
 	}
-	
-	//ip체크 결과 리턴
+
+	// script데이터 리턴
+	public int getScriptData(String serviceName, String startDate, String endDate)
+			throws UnknownHostException {
+		QueryBuilder queryBuilder = qb.getMMnBoolQuery(qb.formFilter(serviceName, startDate, endDate), 
+				QueryBuilders.scriptQuery(new Script("doc.access_date.date.getHourOfDay() >= 8  "
+						+ "&& doc.access_date.date.getHourOfDay() < 19 && doc.access_date.date.getDayOfWeek() < 6")));
+
+		SearchResponse sr = qb.getSearchResponse(queryBuilder);
+		List<Map<String, Object>> list = qb.getResponseAsList(sr);
+		return list.size();
+	}
+
+	// ip체크 결과 리턴
 	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate)
 			throws UnknownHostException {
 
 		Map<String, List<String>> listMap = new HashMap<String, List<String>>();
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate));
+		QueryBuilder queryBuilder = qb.getMBoolQuery(qb.formFilter(serviceName, startDate, endDate));
 		SearchResponse sr = qb.getSearchResponse(queryBuilder);
-		
+
 		List<Map<String, Object>> tempList = qb.getResponseAsList(sr);
 		List<String> countList = new ArrayList<String>();
-		
-		for(Map<String, Object> map : tempList) {
+
+		for (Map<String, Object> map : tempList) {
 			String tempIp = (String) map.get("access_ip");
-			
-			if(!ivcheck.checkOfficial(tempIp)) {
+
+			if (!ivcheck.checkOfficial(tempIp)) {
 				externalCount++;
 				externalIpList.add(tempIp);
-				if(!ivcheck.checkExternal(tempIp)) {
+				if (!ivcheck.checkExternal(tempIp)) {
 					unAuthCount++;
 					unAuthIpList.add(tempIp);
 				}
@@ -89,20 +102,20 @@ public class GenerateForm {
 		}
 		countList.add(Integer.toString(externalCount));
 		countList.add(Integer.toString(unAuthCount));
-		
+
 		listMap.put("countList", countList);
 		listMap.put("externalIpList", externalIpList);
 		listMap.put("unAuthIpList", unAuthIpList);
-		
+
 		return listMap;
 	}
 
-	//과다조회 결과 리턴
+	// 과다조회 결과 리턴
 	public Map<String, List<String>> getExcessiveAccess(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
 
-		QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(query.formQuery(serviceName, startDate, endDate));
-		TermsAggregationBuilder aggregation = AggregationBuilders.terms("eccess_id").field(fieldName);
+		QueryBuilder queryBuilder = qb.getMBoolQuery(qb.formFilter(serviceName, startDate, endDate));
+		TermsAggregationBuilder aggregation = qb.getTermsAggregation("eccess_id", fieldName);
 
 		SearchResponse sr = qb.getSearchResponseIncludeAggs(queryBuilder, aggregation);
 
@@ -111,22 +124,15 @@ public class GenerateForm {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		Terms terms = sr.getAggregations().get("eccess_id");
 
-		int size = terms.getBuckets().size();
-
-		if (size != 0) {
-			for (int i = 0; i < size; i++) {
-				if (terms.getBuckets().get(i).getDocCount() > 10) {
-					keyList.add(terms.getBuckets().get(i).getKeyAsString());
-					docCountList.add(Long.toString(terms.getBuckets().get(i).getDocCount()));
-					
-					map.put("keyList", keyList);
-					map.put("docCountList", docCountList);
-				}
+		for (Bucket entry : terms.getBuckets()) {
+			if (entry.getDocCount() > 10) {
+				keyList.add(entry.getKeyAsString());
+				docCountList.add(Long.toString(entry.getDocCount()));
 			}
-			return map;
-		}else {
-			System.out.println("데이터가 없습니다.");
-			return null;
 		}
+		map.put("keyList", keyList);
+		map.put("docCountList", docCountList);
+		
+		return map;
 	}
 }
