@@ -115,7 +115,7 @@
 var regSep = /[\-\_\^\.\s\[\]\|\:]+/;
 var regSepR = /[^\-\_\^\.\s\[\]\|\:]+/;
 var fieldName = ["server","service","accessDate","accessIp","accessId","accessUri","action","remark"];
-var jsonData;
+
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -162,11 +162,13 @@ function splitInputSep(inputId){
 	    var txt = "<span id=\""+inputId+"Item"+item+"\" class=\"item\" draggable=\"true\" ondragstart=\"drag(event)\">"+inputItems[item]+"</span>";
 	    document.getElementById(inputId+"Items").innerHTML += txt;
 	}
-	
+	/* 	
+	//추후에 필드 데이터들이 IP인지 판별하는 작업 등에 쓰일 듯(구분자와 데이터를 사용하여)
 	if(inputItems.length > 1)
 		var inputSep = extSep(inputId, inputStr, inputItems);
+	*/
 }
-
+/* 
 //extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
 function extSep(inputId, inputStr, inputItems){
 	var Items = inputStr.split(regSepR);
@@ -179,6 +181,8 @@ function extSep(inputId, inputStr, inputItems){
 	console.log("result : "+result);
 	
 }
+ */
+ 
 /*
 최종적으로 만들어야 할 필터 양식...
 filename >>
@@ -201,18 +205,37 @@ Sep [\-\_\^\.\s\[\]\|\:]+
 %{Sep}?%{noSep:server}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:service}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:day1}%{Sep}%{noSep:filetype}$
 맨 처음엔 구분자 없을수도 있어서 ?로 함.
 		
-아직 날짜는 어떻게 처리할지 모르겠음. ㅎㅎ; 너무 어렵다...
+아직 날짜는 어떻게 처리할지 모르겠음. ㅎㅎ; 어렵다... 사용자의 추가적인 입력(날짜형식선택)이 필요할 수도
 1. items의 갯수 파악(n개). 양쪽에 구분자 없는 경우, n-1개로 처리해야함
-2. items를 하나씩 확인한다...(?)
+2. n개 만큼 %{Sep}%{noSep}을 만들 건데, 그 중 필드데이터가 뭔지 알아야한다.
+3. 아래와 같이 각 필드에 해당하는 데이터를 읽을 수 있다.
+	for (fn in fieldName)
+		fieldData = document.getElementById(fieldName[fn]).innerText;
+4. 하지만, 내가 필요 한 건, 위에서 찾은 div에 하위 항목인 span의 id가 필요하다.
+filenameItem3이면, 서버명은 파일네임 아이템들 중에  0123 4번째에 있는 것이다.
+>> document.getElementById(fieldName[fn]).children[0].id
 
 		
 		
  */
+//데이터 변화 확인을 위해 꺼내둠
+var fieldDatas = [];
+//필터 생성
 function makeFilter(){
+	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다.
+	//필드 데이터들의 id를 읽어,
+	//각 데이터들이 어떤 문자열의 어디에 위치해 있던 것이고, 어떤 필드를 나타내는지 알아낸다.
+	//그리고 이 정보들을 필터 생성에 사용한다.
 	for (fn in fieldName){
-		//fieldData = document.getElementById(fieldName[fn]).innerText;
-		
+		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
+		for (fd in fieldDatas[fn]){
+			var fdInfo = fieldDatas[fn][fd].id;
+			fdInfoDoc = fdInfo.replace()
+			fdInfoSeq = 
+			console.log(fieldDatas[fn][fd].id);
+		}
 	}
+	
 	/*
 	$.ajax({
 	    url:"filterGenForm",
