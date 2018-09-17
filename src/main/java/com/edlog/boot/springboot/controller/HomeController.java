@@ -102,7 +102,7 @@ public class HomeController {
 		int overtimeAccess = 0;
 		overtimeAccess = gf.getScriptData(serviceName, startDate, endDate);
 		
-		//모델에 추가
+		//formmat 객체에 추가 후 모델에 formmat추가
 		formmat.setDate(date);
 		formmat.setPeriod(period);
 		formmat.setAccessTry(accessTry);
@@ -120,12 +120,5 @@ public class HomeController {
 		
 		return "test";
 	}
-	//ipConfig확인
-			
-	@GetMapping("/ip")
-	public String testIp() {
-		
-		
-		return null;
-	}
+	
 }

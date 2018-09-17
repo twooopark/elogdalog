@@ -21,7 +21,9 @@ public interface QueryService {
 	public QueryBuilder getTermQuery(String fieldName, String value);
 	public TermsAggregationBuilder getTermsAggregation(String aggsName, String fieldName);
 	public SearchResponse getSearchResponse(QueryBuilder query);
+	public SearchResponse getSearchResponseWithAggs(AggregationBuilder aggs);
 	public SearchResponse getSearchResponseIncludeAggs(QueryBuilder query, AggregationBuilder aggs);
 	public List<Map<String, Object>> getResponseAsList(SearchResponse sr);
+	public Map<String, List<String>> getBucketAsMap(SearchResponse sr, String aggsName);
 	
 }

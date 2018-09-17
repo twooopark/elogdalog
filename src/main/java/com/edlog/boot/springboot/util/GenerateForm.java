@@ -76,6 +76,14 @@ public class GenerateForm {
 		List<Map<String, Object>> list = qb.getResponseAsList(sr);
 		return list.size();
 	}
+	// ServiceNameList 리턴
+	public Map<String, List<String>> getServiceList(String fieldName) {
+		TermsAggregationBuilder aggregation = qb.getTermsAggregation("service", fieldName);
+		SearchResponse sr = qb.getSearchResponseWithAggs(aggregation);
+		
+		Map<String, List<String>> map = qb.getBucketAsMap(sr, "service");
+		return map;
+	}
 
 	// ip체크 결과 리턴
 	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate)
@@ -115,23 +123,11 @@ public class GenerateForm {
 			String fieldName) throws IOException {
 
 		QueryBuilder queryBuilder = qb.getMBoolQuery(qb.formFilter(serviceName, startDate, endDate));
-		TermsAggregationBuilder aggregation = qb.getTermsAggregation("eccess_id", fieldName);
+		TermsAggregationBuilder aggregation = qb.getTermsAggregation("accessId", fieldName);
 
 		SearchResponse sr = qb.getSearchResponseIncludeAggs(queryBuilder, aggregation);
 
-		List<String> keyList = new ArrayList<String>();
-		List<String> docCountList = new ArrayList<String>();
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		Terms terms = sr.getAggregations().get("eccess_id");
-
-		for (Bucket entry : terms.getBuckets()) {
-			if (entry.getDocCount() > 10) {
-				keyList.add(entry.getKeyAsString());
-				docCountList.add(Long.toString(entry.getDocCount()));
-			}
-		}
-		map.put("keyList", keyList);
-		map.put("docCountList", docCountList);
+		Map<String, List<String>> map = qb.getBucketAsMap(sr, "accessId");
 		
 		return map;
 	}

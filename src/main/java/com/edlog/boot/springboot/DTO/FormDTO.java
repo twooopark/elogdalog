@@ -64,8 +64,8 @@ public class FormDTO implements Serializable {
 		return accessTry;
 	}
 	
-	public void setAccessTry(int accesTry) {
-		this.accessTry = accesTry;
+	public void setAccessTry(int accessTry) {
+		this.accessTry = accessTry;
 	}
 	
 	public int getLoginY() {
