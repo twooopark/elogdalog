@@ -8,6 +8,7 @@ import com.edlog.boot.spring.dto.MappingFieldDTO;
 
 @Controller
 public class FilterGenController {
+	@RequestMapping("/filterGen") public String filterGenPage() {return "filterGen";}
 	@RequestMapping(value="/filterGenForm", method=RequestMethod.GET)
 	public String filterGenerate(MappingFieldDTO dto2) {
 		MappingFieldDTO dto = new MappingFieldDTO();
