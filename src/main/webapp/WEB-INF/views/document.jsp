@@ -21,6 +21,11 @@
 	<link rel="stylesheet" href="resources/css/document.css">
 </head>
 <body>
+<%
+	if(session.getAttribute("USER_SESSION")==null){
+		response.sendRedirect("/member/loginPage");
+	}
+%>
 	<!--HOMEPAGE-->
 	<div class="home_wrapper">
 		<!--헤더-->

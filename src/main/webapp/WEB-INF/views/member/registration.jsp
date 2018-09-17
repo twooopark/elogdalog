@@ -11,6 +11,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+<%
+	if(session.getAttribute("USER_SESSION")==null){
+		response.sendRedirect("/member/loginPage");
+	}
+%>
 	<!--HOMEPAGE-->
 	<div class="home_wrapper">
 		<!--헤더-->

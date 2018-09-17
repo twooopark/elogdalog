@@ -40,7 +40,7 @@ public class MemberService {
 				out.close();
 				return 0;
 			}else {
-				session.setAttribute("user",DBmember);
+				session.setAttribute("USER_SESSION",DBmember);
 				out.println(1);
 				out.close();
 				return 1;
