@@ -20,4 +20,8 @@ public class PageController {
 	@RequestMapping("/analyze")public String analyze() {return "analyze";}
 	@RequestMapping("/document")public String document() {return "document";}
 	
+	@RequestMapping("/inner")
+	public String inner() {
+		return "inner";
+	}
 }

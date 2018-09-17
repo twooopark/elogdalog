@@ -31,7 +31,6 @@
 	
 		/* 시작일 ~ 마지막일 각각의 년/월/일을 구하기 위한 함수입니다*/
 		function parseDate(rangeDate){
-			console.log("TODAY : " + rangeDate);
 			var startDate = (rangeDate.split("~")[0]).trim();
 			var endDate = (rangeDate.split("~")[1]).trim();
 	
