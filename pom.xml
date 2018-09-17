@@ -69,12 +69,14 @@
 			<artifactId>transport-netty4-client</artifactId>
 			<version>6.4.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
 		
+
 		<!-- spring boot jdbc -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
