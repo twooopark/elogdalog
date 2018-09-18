@@ -33,6 +33,22 @@ public class FilterGenController {
 		}
 		 */	
 		
+		"
+		grok {
+			match => {
+				"source" => 
+					["%{WINPATH:file_path}\\%{WORD2:server}_%{WORD2:service}_%{WORD2:doctype}_%{DATENUM2:file_date}.%{WORD2:file_type}$"]
+			}
+		}		
+		grok {
+			match => {
+				"message" => 
+					["\[(?<access_date>%{YEAR}/%{MONTHNUM2}/%{MONTHDAY} %{TIME})\] %{IPORHOST:access_ip} \| %{USER:access_id} \| %{DATA:access_uri} \| %{DATA:action} \| %{DATA:remark}?$",
+					"^%{WORD:access_date}\^%{logSep:access_ip}\^%{logSep:access_id}\^%{DATA:access_uri}\^%{DATA:action}\^%{DATA:remark}?$"]
+
+			}
+		}
+		"
 		System.out.println(dto);
 		
 	

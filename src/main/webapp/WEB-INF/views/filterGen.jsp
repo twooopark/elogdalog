@@ -3,11 +3,10 @@
 
 <!DOCTYPE html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <style>
 .bucket {
-    width: 200px;
     height: 30px;
-    padding: 10px;
     border: 1px solid #aaaaaa;
 }
 .item {
@@ -18,96 +17,122 @@
 </head>
 
 <body>
-<form id="frm" action="/filterGen">
-  File name : <input type="text" id="filename" style="width:400px" value="devweb_dev-admin.ppurio.com_access_18010211.log">
-  Sep : <input type="text" id="filenameSep" style="width:400px" value="[\-\_\^\.\s\[\]\|\:]+">
-  <br>
-  Log data : <input type="text" id="logdata" style="width:400px" value="[ppurio30  ] jiny|11:42:35|172.21.25.180|PAMenu.qri|main|">
-  Sep : <input type="text" id="logdataSep" style="width:400px" value="[\-\_\^\s\[\]\|\:]+">
-  <br><br>
-  <input id="regSplitBtn" type="button" onclick="inputIsEmpty()" value="텍스트 분할"/>
-</form> 
 
-<p>구분자 : [ ] _ | ^ , . : - 에 따라 자동 분할됩니다. 구분자 수정 가능하게 할 예정</p>
-
-<div ondrop="drop(event)" ondragover="allowDrop(event)">
-	<div id="filenameItems" style="height:50px"></div>
-	<div id="logdataItems" style="height:50px"></div>
+<div class="container theme-showcase" role="main">
+<div class="jumbotron">
+	<h1>Logstash Filter Generator</h1>
+	<p>파일명, 로그데이터 </p>
+</div>
+<div class="panel panel-primary">
+	<div class="panel-heading">파일명, 로그데이터를 구분자로 분할</div>
+	<div class="panel-body">
+		<form id="frm" action="/filterGen">
+			<div class="form-group col-md-6">
+		  		<label>로그 파일명</label>
+		  		<input type="text" id="filename" class="form-control" value="devweb_devweb.dcsms.co.kr_access_18081615.log">
+		  	</div>
+			<div class="form-group col-md-6">
+		  		<label>파일명 구분자</label>
+		  		<input type="text" id="filenameSep" class="form-control" value="[\-\_\^\.\s\[\]\|\:]+">
+		  	</div>
+			<div class="form-group col-md-6">
+		  		<label>로그 데이터</label>
+		  		<input type="text" id="logdata" class="form-control" value="[2018-08-16 15:57:51] jwmoon|172.21.25.207|/synergy/content/callerbook/limit_list">
+		  	</div>
+			<div class="form-group col-md-6">
+		  		<label>로그 데이터 구분자</label>
+		  		<input type="text" id="logdataSep" class="form-control" value="[\^\s\[\]\|]+">
+		  	</div>
+		  	<button id="regSplitBtn" class="btn btn-primary" type="button" onclick="inputIsEmpty()">텍스트 분할</button>
+		</form> 
+	</div>
 </div>
 
-<form action="/filterGenForm" id="filterGenForm">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">항목</th>
-      <th scope="col">필드</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">
-		<div id="server" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>서버 명</td>
-      <td>server</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="service" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>서비스 명</td>
-      <td>service</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="accessDate" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>접근 일시</td>
-      <td>access_date</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="accessIp" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>접근 IP</td>
-      <td>access_ip</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="accessId" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>접근 ID</td>
-      <td>access_id</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="accessUri" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>URI</td>
-      <td>access_uri</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="action" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>동작</td>
-      <td>action</td>
-    </tr>
-    <tr>
-      <th scope="row">
-		<div id="remark" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-	  </th>
-      <td>상세정보</td>
-      <td>remark</td>
-    </tr>
-    <tr>
-      <td><input id="makeFilterBtn" type="button" onclick="makeFilter()" value="필터 생성 및 등록"></td>
-    </tr>
-  </tbody>
-</table>
-</form>
+<div class="panel panel-primary">
+	<div class="panel-heading">분할된 항목들 > 필드 데이터 (drag & drop)</div>
+	<div class="panel-body">
+	<div ondrop="drop(event)" ondragover="allowDrop(event)">
+		<div id="filenameItems" style="height:50px"></div>
+		<div id="logdataItems" style="height:50px"></div>
+	</div>
+	</div>
+</div>
 
+<div class="panel panel-primary">
+	<div class="panel-heading">필드 데이터, 필드명과 매핑하여 필터 자동 생성</div>
+	<div class="panel-body">
+		<table class="table table-bordered table-striped table-hover">
+		  <thead>
+		    <tr>
+		      <th scope="col" width="60%">필드 데이터</th>
+		      <th scope="col">항목</th>
+		      <th scope="col">필드</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">
+				<div id="server" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>서버 명</td>
+		      <td>server</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="service" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>서비스 명</td>
+		      <td>service</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="accessDate" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>접근 일시</td>
+		      <td>access_date</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="accessIp" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>접근 IP</td>
+		      <td>access_ip</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="accessId" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>접근 ID</td>
+		      <td>access_id</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="accessUri" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>URI</td>
+		      <td>access_uri</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="action" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>동작</td>
+		      <td>action</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">
+				<div id="remark" class="bucket" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+			  </th>
+		      <td>상세정보</td>
+		      <td>remark</td>
+		    </tr>
+		  </tbody>
+		</table>
+		<button id="makeFilterBtn" class="btn btn-primary" type="button" onclick="makeFilter()">필터 생성</button>
+
+	</div>
+</div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 
