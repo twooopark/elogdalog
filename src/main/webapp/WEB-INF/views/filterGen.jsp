@@ -205,9 +205,69 @@ function multipleFd(fn){
 		jsonData[fieldName[fn]] = jsonList.slice(0,-1);
 }
 
+
+//필터 생성 시 실행
+function makeFilter(){
+	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
+	//필드 데이터들의 태그 id를 읽어,
+	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
+	for (fn in fieldName){
+		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
+		
+	 	//if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri")
+	 		multipleFd(fn);
+	 	//else 
+	 	//	singleFd();
+	}
+	//send json
+	jsonAjax();
+}
+
+function jsonAjax(){
+
+/* 	jsonData = {
+			"server":"server",
+			"service":"service",
+			"accessDate":"accessDate",
+			"accessIp":"accessIp",
+			"accessId":"accessId",
+			"accessUri":"accessUri",
+			"action":"action",
+			"remark":"remark"
+			}
+ */	
+	$.ajax({
+	    url:"filterGenForm",
+	    type:'POST',
+// 	  	dataType:'json',
+	    data:jsonData,
+	    success:function(data){
+	    	alert(data);
+	        alert("완료!");
+	    },
+	    error:function(err){
+	        alert("실패");
+	    }
+	});
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+
 /*
 //필드 데이터가 여러개인 경우(List Object)
-function multipleFd(fn){
+function multipleFd2(fn){
 	var fList = {};
 	var lList = {};
 	var jsonList = [];
@@ -232,81 +292,7 @@ function multipleFd(fn){
 	jsonData[fieldName[fn]] = jsonList;
 	console.log(jsonData);
 }
-*/
-/*
-//필드 데이터가 여러개인 경우 (Object : List)
-function multipleFd(fn){
-	var fList = [];
-	var lList = [];
-	var jsonList = {};
-	//jsonList.keys("filename","logdata");
-	for (fd in fieldDatas[fn]){
-		var fdInfo = fieldDatas[fn][fd].id;
-		if(typeof fdInfo != "undefined"){
-			//filenameItem3 >> filenameItem , 3 split
-			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
-			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
-			
-			if(fdInfoDoc == "filenameItem"){
-				fList.push(fdInfoSeq);
-				jsonList[fdInfoDoc] = fList;
-			}
-			else{
-				lList.push(fdInfoSeq);
-				jsonList[fdInfoDoc] = lList;
-			}
-		}
-	}
-	jsonData[fieldName[fn]] = jsonList;
-} 
-*/
-//필터 생성 시 실행
-function makeFilter(){
-	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
-	//필드 데이터들의 태그 id를 읽어,
-	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
-	for (fn in fieldName){
-		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
-		
-	 	//if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri")
-	 		multipleFd(fn);
-	 	//else 
-	 	//	singleFd();
-	}
-	//send json
-	jsonAjax();
-}
-
-function jsonAjax(){
-/*	
- 	jsonData =
- 		{
- 			"server": {
- 				"filenameItem": ["0"]
- 			},
- 			"service": {
- 				"filenameItem": ["3"]
- 			},
- 			"accessDate": {
- 				"filenameItem": ["6"],
- 				"logdataItem": ["3", "4"]
- 			},
- 			"accessIp": {
- 				"logdataItem": ["5", "6", "7", "8"]
- 			},
- 			"accessId": {
- 				"logdataItem": ["1"]
- 			},
- 			"accessUri": {
- 				"logdataItem": ["9", "10"]
- 			},
- 			"action": {
- 				"logdataItem": ["11"]
- 			},
- 			"remark": {}
- 		}
-*/
-/*
+//결과물
 	jsonData =
 		{
 		  "server": [
@@ -365,46 +351,65 @@ function jsonAjax(){
 		    }
 		  ]
 		}
-*/	
-/* 	jsonData = {
-			"server":"server",
-			"service":"service",
-			"accessDate":"accessDate",
-			"accessIp":"accessIp",
-			"accessId":"accessId",
-			"accessUri":"accessUri",
-			"action":"action",
-			"remark":"remark"
+*/
+
+/*
+//필드 데이터가 여러개인 경우 (Object : List)
+function multipleFd1(fn){
+	var fList = [];
+	var lList = [];
+	var jsonList = {};
+	//jsonList.keys("filename","logdata");
+	for (fd in fieldDatas[fn]){
+		var fdInfo = fieldDatas[fn][fd].id;
+		if(typeof fdInfo != "undefined"){
+			//filenameItem3 >> filenameItem , 3 split
+			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
+			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
+			
+			if(fdInfoDoc == "filenameItem"){
+				fList.push(fdInfoSeq);
+				jsonList[fdInfoDoc] = fList;
 			}
- */	
-	$.ajax({
-	    url:"filterGenForm",
-	    type:'POST',
-// 	  	dataType:'json',
-	    data:jsonData,
-	    success:function(data){
-	    	alert(data);
-	        alert("완료!");
-	    },
-	    error:function(err){
-	        alert("실패");
-	    }
-	});
-}
+			else{
+				lList.push(fdInfoSeq);
+				jsonList[fdInfoDoc] = lList;
+			}
+		}
+	}
+	jsonData[fieldName[fn]] = jsonList;
+} 
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+//결과물
+	jsonData =
+		{
+			"server": {
+				"filenameItem": ["0"]
+			},
+			"service": {
+				"filenameItem": ["3"]
+			},
+			"accessDate": {
+				"filenameItem": ["6"],
+				"logdataItem": ["3", "4"]
+			},
+			"accessIp": {
+				"logdataItem": ["5", "6", "7", "8"]
+			},
+			"accessId": {
+				"logdataItem": ["1"]
+			},
+			"accessUri": {
+				"logdataItem": ["9", "10"]
+			},
+			"action": {
+				"logdataItem": ["11"]
+			},
+			"remark": {}
+		}
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
+*/
 
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}
 /*
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
 function splitInputSep(){
