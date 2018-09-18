@@ -19,11 +19,11 @@
 
 <body>
 <form id="frm" action="/filterGen">
-  File name:<br>
-  <input type="text" id="filename" style="width:400px" value="devweb_dev-admin.ppurio.com_access_18010211.log">
+  File name : <input type="text" id="filename" style="width:400px" value="devweb_dev-admin.ppurio.com_access_18010211.log">
+  Sep : <input type="text" id="filenameSep" style="width:400px" value="[\-\_\^\.\s\[\]\|\:]+">
   <br>
-  Log data:<br>
-  <input type="text" id="logdata" style="width:400px" value="[ppurio30  ] jiny|11:42:35|172.21.25.180|PAMenu.qri|main|">
+  Log data : <input type="text" id="logdata" style="width:400px" value="[ppurio30  ] jiny|11:42:35|172.21.25.180|PAMenu.qri|main|">
+  Sep : <input type="text" id="logdataSep" style="width:400px" value="[\-\_\^\s\[\]\|\:]+">
   <br><br>
   <input id="regSplitBtn" type="button" onclick="inputIsEmpty()" value="텍스트 분할"/>
 </form> 
@@ -121,19 +121,26 @@ filter example:
 */
 
 //구분자 정규식
-var regSep = /[\-\_\^\.\s\[\]\|\:]+/;
-var regSepR = /[^\-\_\^\.\s\[\]\|\:]+/;
+var regSep;
+var regSepR;
+//var regIP = /((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})/g;
 
+//필드명, 필드데이터
 var fieldName = ["server","service","accessDate","accessIp","accessId","accessUri","action","remark"];
 var fieldDatas = {};
 
+//ajax로 보낼 데이터
 var jsonData = {};
-//jsonData.keys(fieldName);
 
-
+/*
 //extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
 function extSep(inputId, inputStr, inputItems){
-	var Items = inputStr.split(regSepR);
+	var Items;
+	if(inputId == "filename")
+		Items = inputStr.split(regSepFR);
+	else
+		Items = inputStr.split(regSepLR);
+	
 	var result = "";
 	for (item in Items){
 		//console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
@@ -141,14 +148,23 @@ function extSep(inputId, inputStr, inputItems){
 	}
 	//console.log("result : "+result);
 }
+*/
+
+function regSepUpdate(inputId){
+	reg = document.getElementById(inputId+"Sep").value;
+	regSep = new RegExp(reg);
+	regSepR = new RegExp(reg.replace("/[","/[^"));
+}
 
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
 function splitInputSep(inputId){
 	//입력한 파일명, 로그데이터
 	var inputStr = document.getElementById(inputId).value;
-	//구분자에 따라 분할
-	var inputItems = inputStr.split(regSep);
 	
+	//구분자 수정
+	regSepUpdate(inputId);
+	var inputItems = inputStr.split(regSep);
+		
 	//구분자로 시작하는 경우, 공란이 생긴다. 제거
 	if(inputItems[0]=="")
 		inputItems.shift();
@@ -173,6 +189,7 @@ function inputIsEmpty(){
  	//Items > span init
 	document.getElementById("filenameItems").innerHTML = "";
 	document.getElementById("logdataItems").innerHTML = "";
+	
 	//bucket > span init
 	var divBuckets = document.getElementsByClassName("bucket");
 	for (bucket in divBuckets)
@@ -225,28 +242,28 @@ function makeFilter(){
 
 function jsonAjax(){
 
-/* 	jsonData = {
-			"server":"server",
-			"service":"service",
-			"accessDate":"accessDate",
-			"accessIp":"accessIp",
-			"accessId":"accessId",
-			"accessUri":"accessUri",
-			"action":"action",
-			"remark":"remark"
-			}
+/* 	jsonData = 
+		{
+		  "server": "filenameItem0",
+		  "service": "filenameItem3",
+		  "accessDate": "filenameItem6,logdataItem3,logdataItem4",
+		  "accessIp": "logdataItem5,logdataItem6,logdataItem7,logdataItem8",
+		  "accessId": "logdataItem1",
+		  "accessUri": "logdataItem9,logdataItem10",
+		  "action": "logdataItem11",
+		  "remark": "logdataItem12"
+		}
  */	
 	$.ajax({
 	    url:"filterGenForm",
 	    type:'POST',
 // 	  	dataType:'json',
 	    data:jsonData,
-	    success:function(data){
-	    	alert(data);
-	        alert("완료!");
+	    success:function(res){
+	    	alert(res);
 	    },
 	    error:function(err){
-	        alert("실패");
+	        alert("err: "+err);
 	    }
 	});
 }

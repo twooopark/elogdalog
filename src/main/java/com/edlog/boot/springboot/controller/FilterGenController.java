@@ -19,10 +19,24 @@ public class FilterGenController {
 	
 	
 	@RequestMapping(value="/filterGenForm", method=RequestMethod.POST)
-	public void filterGenerate(MappingFieldDTO dto,HttpServletResponse response) throws IOException {
-	System.out.println(dto);
+	public void filterGenerate(MappingFieldDTO dto, HttpServletResponse response) throws IOException {
+		/* 	jsonData = 
+		{
+		  "server": "filenameItem0",
+		  "service": "filenameItem3",
+		  "accessDate": "filenameItem6,logdataItem3,logdataItem4",
+		  "accessIp": "logdataItem5,logdataItem6,logdataItem7,logdataItem8",
+		  "accessId": "logdataItem1",
+		  "accessUri": "logdataItem9,logdataItem10",
+		  "action": "logdataItem11",
+		  "remark": "logdataItem12"
+		}
+		 */	
+		
+		System.out.println(dto);
+		
 	
-	PrintWriter writer = response.getWriter();
-	writer.print("SUCCESS");
+		PrintWriter writer = response.getWriter();
+		writer.print("success");
 	}
 }
