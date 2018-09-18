@@ -111,24 +111,24 @@
 
 <script>
 
+/*
+grok-patterns:
+	noSep [^\-\_\^\.\s\[\]\|\:]+
+	Sep [\-\_\^\.\s\[\]\|\:]+
+
+filter example:
+	%{Sep}?%{noSep:server}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:service}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:day1}%{Sep}%{noSep:filetype}$
+*/
+
 //구분자 정규식
 var regSep = /[\-\_\^\.\s\[\]\|\:]+/;
 var regSepR = /[^\-\_\^\.\s\[\]\|\:]+/;
+
 var fieldName = ["server","service","accessDate","accessIp","accessId","accessUri","action","remark"];
+var fieldDatas = [];
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}
+var jsonData = new Array();
+jsonData.keys(fieldName);
 
 function inputIsEmpty(){
 	var filenameStr = document.getElementById("filename").value;
@@ -170,8 +170,7 @@ function splitInputSep(inputId){
 		var inputSep = extSep(inputId, inputStr, inputItems);
 	*/
 }
-
-/* 
+ 
 //extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
 function extSep(inputId, inputStr, inputItems){
 	var Items = inputStr.split(regSepR);
@@ -184,48 +183,48 @@ function extSep(inputId, inputStr, inputItems){
 	console.log("result : "+result);
 	
 }
- */
- 
-/*
-["", "ppurio30", "jiny", "11", "42", "35", "172", "21", "25", "180", "PAMenu", "qri", "main", ""]
 
-noSep [^\-\_\^\.\s\[\]\|\:]+
-Sep [\-\_\^\.\s\[\]\|\:]+
-
-%{Sep}?%{noSep:server}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:service}%{Sep}%{noSep}%{Sep}%{noSep}%{Sep}%{noSep:day1}%{Sep}%{noSep:filetype}$
-	
-*/
-
-var jsonData;
 //필터 생성
 function makeFilter(){
-	var fieldDatas = [];
-	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다.
-	//필드 데이터들의 id를 읽어,
-	//각 데이터들이 어떤 문자열의 어디에 위치해 있던 것이고, 어떤 필드를 나타내는지 알아낸다.
-	//그리고 이 정보들을 필터 생성에 사용한다.
+	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
+	//필드 데이터들의 태그 id를 읽어,
+	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
 	for (fn in fieldName){
 		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
 		
-		//필드 데이터가 한 개인 경우
-		if(typeof fieldDatas[fn][0] != "undefined"){
-			var fdInfo = fieldDatas[fn][0].id;
-			console.log(fieldName[fn]+" : "+fdInfo);
-			jsonData.fieldName[fn] = fdInfo;
+	 	if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri"){
+			multipleFd();
 		}
-		
-		/* 필드 데이터가 여러개인 경우 ()
-		for (fd in fieldDatas[fn]){
-			var fdInfo = fieldDatas[fn][fd].id;
-			if(typeof fdInfo != "undefined"){
-				var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
-				var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
-				console.log("fdInfo:"+fdInfo+", fdInfoDoc:"+fdInfoDoc+", fdInfoSeq:"+fdInfoSeq);
-
-			}
-		}*/
+		else{ 
+			singleFd();
+	 	} 
 	}
-	
+}
+//필드 데이터가 한 개인 경우
+function singleFd(){
+	var fdInfo = fieldDatas[fn][0];
+	if(typeof fdInfo != "undefined"){
+		jsonData[fieldName[fn]] = fdInfo.id;
+	}	
+}
+//필드 데이터가 여러개인 경우
+function multipleFd(){
+	var jsonList = new Array();
+	for (fd in fieldDatas[fn]){
+		var fdInfo = fieldDatas[fn][fd];
+		if(typeof fdInfo != "undefined"){
+			fdInfo = fieldDatas[fn][fd].id;
+			
+			//filenameItem3 >> filenameItem , 3 split
+			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
+			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
+			//console.log("fdInfo:"+fdInfo+", fdInfoDoc:"+fdInfoDoc+", fdInfoSeq:"+fdInfoSeq);
+		}
+	}
+	jsonData[fieldName[fn]] = fdInfo;
+}
+
+function jsonAjax(){
 	/*
 	$.ajax({
 	    url:"filterGenForm",
@@ -244,6 +243,19 @@ function makeFilter(){
 	*/
 }
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
 /*
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
 function splitInputSep(){
