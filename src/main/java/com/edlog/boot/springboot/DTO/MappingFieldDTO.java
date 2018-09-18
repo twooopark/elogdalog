@@ -1,4 +1,4 @@
-package com.edlog.boot.spring.dto;
+package com.edlog.boot.springboot.DTO;
 
 public class MappingFieldDTO {
 	private String server;

@@ -108,7 +108,7 @@
 </table>
 </form>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 
 /*
@@ -125,27 +125,23 @@ var regSep = /[\-\_\^\.\s\[\]\|\:]+/;
 var regSepR = /[^\-\_\^\.\s\[\]\|\:]+/;
 
 var fieldName = ["server","service","accessDate","accessIp","accessId","accessUri","action","remark"];
-var fieldDatas = [];
+var fieldDatas = {};
 
-var jsonData = new Array();
-jsonData.keys(fieldName);
+var jsonData = {};
+//jsonData.keys(fieldName);
 
-function inputIsEmpty(){
-	var filenameStr = document.getElementById("filename").value;
-	var logdataStr = document.getElementById("logdata").value;
+
+//extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
+function extSep(inputId, inputStr, inputItems){
+	var Items = inputStr.split(regSepR);
+	var result = "";
+	for (item in Items){
+		//
+		console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
+		result += Items[item]+inputItems[item];
+	}
+	console.log("result : "+result);
 	
- 	//Items > span init
-	document.getElementById("filenameItems").innerHTML = "";
-	document.getElementById("logdataItems").innerHTML = "";
-	//bucket > span init
-	var divBuckets = document.getElementsByClassName("bucket");
-	for (bucket in divBuckets)
-		divBuckets[bucket].innerHTML="";
-	
-	if(filenameStr.length > 0)
-		splitInputSep("filename");
-	if(logdataStr.length > 0)
-		splitInputSep("logdata");
 }
 
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
@@ -170,36 +166,26 @@ function splitInputSep(inputId){
 		var inputSep = extSep(inputId, inputStr, inputItems);
 	*/
 }
- 
-//extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
-function extSep(inputId, inputStr, inputItems){
-	var Items = inputStr.split(regSepR);
-	var result = "";
-	for (item in Items){
-		//
-		console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
-		result += Items[item]+inputItems[item];
-	}
-	console.log("result : "+result);
+
+//텍스트 분할 클릭 시 실행
+function inputIsEmpty(){
+	var filenameStr = document.getElementById("filename").value;
+	var logdataStr = document.getElementById("logdata").value;
 	
+ 	//Items > span init
+	document.getElementById("filenameItems").innerHTML = "";
+	document.getElementById("logdataItems").innerHTML = "";
+	//bucket > span init
+	var divBuckets = document.getElementsByClassName("bucket");
+	for (bucket in divBuckets)
+		divBuckets[bucket].innerHTML="";
+	
+	if(filenameStr.length > 0)
+		splitInputSep("filename");
+	if(logdataStr.length > 0)
+		splitInputSep("logdata");
 }
 
-//필터 생성
-function makeFilter(){
-	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
-	//필드 데이터들의 태그 id를 읽어,
-	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
-	for (fn in fieldName){
-		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
-		
-	 	if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri"){
-			multipleFd();
-		}
-		else{ 
-			singleFd();
-	 	} 
-	}
-}
 //필드 데이터가 한 개인 경우
 function singleFd(){
 	var fdInfo = fieldDatas[fn][0];
@@ -207,40 +193,86 @@ function singleFd(){
 		jsonData[fieldName[fn]] = fdInfo.id;
 	}	
 }
+
 //필드 데이터가 여러개인 경우
-function multipleFd(){
-	var jsonList = new Array();
+function multipleFd(fn){
+	var fList = [];
+	var lList = [];
+	var jsonList = {};
+	//jsonList.keys("filename","logdata");
 	for (fd in fieldDatas[fn]){
-		var fdInfo = fieldDatas[fn][fd];
+		var fdInfo = fieldDatas[fn][fd].id;
 		if(typeof fdInfo != "undefined"){
-			fdInfo = fieldDatas[fn][fd].id;
-			
 			//filenameItem3 >> filenameItem , 3 split
 			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
 			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
-			//console.log("fdInfo:"+fdInfo+", fdInfoDoc:"+fdInfoDoc+", fdInfoSeq:"+fdInfoSeq);
+			
+			if(fdInfoDoc == "filenameItem"){
+				fList.push(fdInfoSeq);
+				jsonList[fdInfoDoc] = fList;
+			}
+			else{
+				lList.push(fdInfoSeq);
+				jsonList[fdInfoDoc] = lList;
+			}
 		}
 	}
-	jsonData[fieldName[fn]] = fdInfo;
+	jsonData[fieldName[fn]] = jsonList;
+}
+
+//필터 생성 시 실행
+function makeFilter(){
+	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
+	//필드 데이터들의 태그 id를 읽어,
+	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
+	for (fn in fieldName){
+		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
+		
+	 	//if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri")
+	 		multipleFd(fn);
+	 	//else singleFd();
+	}
+	//send json
+	jsonAjax();
 }
 
 function jsonAjax(){
-	/*
+// 	jsonData = {
+// 			"server":{"filenameItem":["0"]},
+// 			"service":{"filenameItem":["3"]},
+// 			"accessDate":{"filenameItem":["6"],"logdataItem":["3","4"]},
+// 			"accessIp":{"logdataItem":["5","6","7","8"]},
+// 			"accessId":{"logdataItem":["1"]},
+// 			"accessUri":{"logdataItem":["9","10"]},
+// 			"action":{"logdataItem":["11"]},
+// 			"remark":{}
+// 			};
+	jsonData = {
+			"server":"server",
+			"service":"service",
+			"accessDate":"accessDate",
+			"accessIp":"accessIp",
+			"accessId":"accessId",
+			"accessUri":"accessUri",
+			"action":"action",
+			"remark":"remark"
+			};
+	
+	var jd = JSON.stringify(jsonData);
+	console.log(jd);
 	$.ajax({
 	    url:"filterGenForm",
-	    type:'GET',
-	    data: jsonData,
-	    success:function(data){r
+	    type:'POST',
+// 	  	dataType:'json',
+	    data:jsonData,
+	    success:function(data){
+	    	alert(data);
 	        alert("완료!");
-	        window.opener.location.reload();
-	        self.close();
 	    },
-	    error:function(jqXHR, textStatus, errorThrown){
-	        alert("에러\n" + textStatus + " : " + errorThrown);
-	        self.close();
+	    error:function(err){
+	        alert("실패");
 	    }
 	});
-	*/
 }
 
 function allowDrop(ev) {
