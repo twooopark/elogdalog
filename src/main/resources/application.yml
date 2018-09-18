@@ -12,7 +12,7 @@ spring:
     port : 9300
     cluster-name: Elog_application
     host: 175.115.95.93
-    host2: 175.21.25.77
+    host2: 172.21.25.77
     
     
   mvc:

@@ -125,7 +125,7 @@ public class HomeController {
 		model.addAttribute("formmat", formmat);
 		model.addAttribute("serviceList", serviceList);
 		model.addAttribute("serviceListSize", serviceList.size());
-		return "document";
+		return "test";
 	}
 	
 	@GetMapping("/form")
@@ -134,7 +134,7 @@ public class HomeController {
 		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
 		model.addAttribute("serviceList", serviceList);
 		model.addAttribute("serviceListSize", serviceList.size());
-		return "document";
+		return "test";
 	}
 	
 }
