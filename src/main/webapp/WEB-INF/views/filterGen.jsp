@@ -136,12 +136,10 @@ function extSep(inputId, inputStr, inputItems){
 	var Items = inputStr.split(regSepR);
 	var result = "";
 	for (item in Items){
-		//
-		console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
+		//console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
 		result += Items[item]+inputItems[item];
 	}
-	console.log("result : "+result);
-	
+	//console.log("result : "+result);
 }
 
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
@@ -194,7 +192,49 @@ function singleFd(){
 	}	
 }
 
-//필드 데이터가 여러개인 경우
+//필드 데이터가 여러개인 경우(Object, String)
+function multipleFd(fn){
+	var jsonList = "";
+	for (fd in fieldDatas[fn]){
+		var fdInfo = fieldDatas[fn][fd].id;
+		if(typeof fdInfo != "undefined"){
+			jsonList += fdInfo+",";
+		}
+	}
+	if(jsonList != "")
+		jsonData[fieldName[fn]] = jsonList.slice(0,-1);
+}
+
+/*
+//필드 데이터가 여러개인 경우(List Object)
+function multipleFd(fn){
+	var fList = {};
+	var lList = {};
+	var jsonList = [];
+	//jsonList.keys("filename","logdata");
+	for (fd in fieldDatas[fn]){
+		var fdInfo = fieldDatas[fn][fd].id;
+		if(typeof fdInfo != "undefined"){
+			//filenameItem3 >> filenameItem , 3 split
+			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
+			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
+			if(fdInfoDoc == "filenameItem"){
+				fList[fdInfoDoc] = fdInfoSeq;
+				jsonList.push(fList);
+			}
+			else{
+				lList[fdInfoDoc] = fdInfoSeq;
+				jsonList.push(lList);
+				
+			}
+		}
+	}
+	jsonData[fieldName[fn]] = jsonList;
+	console.log(jsonData);
+}
+*/
+/*
+//필드 데이터가 여러개인 경우 (Object : List)
 function multipleFd(fn){
 	var fList = [];
 	var lList = [];
@@ -218,8 +258,8 @@ function multipleFd(fn){
 		}
 	}
 	jsonData[fieldName[fn]] = jsonList;
-}
-
+} 
+*/
 //필터 생성 시 실행
 function makeFilter(){
 	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
@@ -230,24 +270,103 @@ function makeFilter(){
 		
 	 	//if(fieldName[fn] == "accessDate" || fieldName[fn] == "accessIp" || fieldName[fn] == "accessUri")
 	 		multipleFd(fn);
-	 	//else singleFd();
+	 	//else 
+	 	//	singleFd();
 	}
 	//send json
 	jsonAjax();
 }
 
 function jsonAjax(){
-// 	jsonData = {
-// 			"server":{"filenameItem":["0"]},
-// 			"service":{"filenameItem":["3"]},
-// 			"accessDate":{"filenameItem":["6"],"logdataItem":["3","4"]},
-// 			"accessIp":{"logdataItem":["5","6","7","8"]},
-// 			"accessId":{"logdataItem":["1"]},
-// 			"accessUri":{"logdataItem":["9","10"]},
-// 			"action":{"logdataItem":["11"]},
-// 			"remark":{}
-// 			};
-	jsonData = {
+/*	
+ 	jsonData =
+ 		{
+ 			"server": {
+ 				"filenameItem": ["0"]
+ 			},
+ 			"service": {
+ 				"filenameItem": ["3"]
+ 			},
+ 			"accessDate": {
+ 				"filenameItem": ["6"],
+ 				"logdataItem": ["3", "4"]
+ 			},
+ 			"accessIp": {
+ 				"logdataItem": ["5", "6", "7", "8"]
+ 			},
+ 			"accessId": {
+ 				"logdataItem": ["1"]
+ 			},
+ 			"accessUri": {
+ 				"logdataItem": ["9", "10"]
+ 			},
+ 			"action": {
+ 				"logdataItem": ["11"]
+ 			},
+ 			"remark": {}
+ 		}
+*/
+/*
+	jsonData =
+		{
+		  "server": [
+		    {
+		      "filenameItem": "0"
+		    }
+		  ],
+		  "service": [
+		    {
+		      "filenameItem": "3"
+		    }
+		  ],
+		  "accessDate": [
+		    {
+		      "filenameItem": "6"
+		    },
+		    {
+		      "logdataItem": "4"
+		    }
+		  ],
+		  "accessIp": [
+		    {
+		      "logdataItem": "8"
+		    },
+		    {
+		      "logdataItem": "8"
+		    },
+		    {
+		      "logdataItem": "8"
+		    },
+		    {
+		      "logdataItem": "8"
+		    }
+		  ],
+		  "accessId": [
+		    {
+		      "logdataItem": "1"
+		    }
+		  ],
+		  "accessUri": [
+		    {
+		      "logdataItem": "10"
+		    },
+		    {
+		      "logdataItem": "10"
+		    }
+		  ],
+		  "action": [
+		    {
+		      "logdataItem": "11"
+		    }
+		  ],
+		  "remark": [
+		    {
+		      "logdataItem": "12"
+		    }
+		  ]
+		}
+*/	
+/* 	jsonData = {
 			"server":"server",
 			"service":"service",
 			"accessDate":"accessDate",
@@ -256,10 +375,8 @@ function jsonAjax(){
 			"accessUri":"accessUri",
 			"action":"action",
 			"remark":"remark"
-			};
-	
-	var jd = JSON.stringify(jsonData);
-	console.log(jd);
+			}
+ */	
 	$.ajax({
 	    url:"filterGenForm",
 	    type:'POST',
