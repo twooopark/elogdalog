@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-=======
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/common.jsp"%>
->>>>>>> chaehee
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,7 +13,7 @@
 <body>
 <%
 	if(session.getAttribute("USER_SESSION")==null){
-		response.sendRedirect("/member/loginPage");
+		response.sendRedirect("/");
 	}
 %>
 	<!--HOMEPAGE-->
@@ -43,7 +40,6 @@
 							<input type="radio" class="pick_type_radio" name="pick_type" id="choice"><label for="choice">기간</label>
 						</div>
 
-<<<<<<< HEAD
 								<!-- 주차별 날짜 보기 -->
 								<div class="pick_type_week" id="pick_type_week">
 									<select name="w_year" id="w_year" class="w_datepicker w_datepicker_year" onchange="makeWeekSelectOptions();">
@@ -116,19 +112,7 @@
 <style type="text/css">.fancybox-margin{margin-right:0px;}</style>
 
 </head>
-<body id="main" data-role="main" style="" class="print wrap_fix_body"><div id="content" class="layer_normal layer_mail_print layer_pay_print popup"><div id="toolbar" class="header_print">
-	<h1 class="approval_print_title">
-		인쇄 미리보기
-		<span class="btn_wrap">
-			<span class="wrap_option"><input type="checkbox" name="chk" id="apprChecked"><label for="apprChecked">결재의견</label></span>
-			<span class="wrap_option"><input type="checkbox" name="chk" id="commentChecked"><label for="commentChecked">댓글</label></span>
-
-			<span class="btn_minor_s" id="printDoc" title="인쇄">
-				<span class="ic_print"></span><span class="txt">인쇄</span>
-			</span>
-		</span>
-	</h1>		
-</div><!-- 결재문서 상세-->   
+<body id="main" data-role="main" style="" class="print wrap_fix_body"><div id="content" class="layer_normal layer_mail_print layer_pay_print popup"><div id="toolbar" class="header_print"></div><!-- 결재문서 상세-->   
 <div class="content_page report_detail">   
 	    <section class="content_wrapper">
             <!--전자결제 상세-->
@@ -137,7 +121,7 @@
 <!-- 문서 내용 표시 테스트 -->
     <form id="document_content" class="form_doc_editor editor_view" data-dpmaxz-eid="1"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><div style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;" 맑은="" 고딕";font-size:10pt;"=""><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;">   <table class="__se_tbl" style="background: white; border: 0px solid black; width: 800px; color: black; font-family: malgun gothic,dotum,arial,tahoma; font-size: 12px; border-collapse: collapse !important;"><!-- Header -->
     <tbody><tr><td colspan="2" style="padding: 3px !important; border: 0px solid black; width: 800px; height: 90px !important; text-align: center; font-size: 30px; font-weight: bold; vertical-align: middle;" class="">관리자웹 접근이력 검토서</td></tr><tr><td style="width:300px; border: 0; padding: 0 !important; vertical-align: middle !important;" class=""><table class="__se_tbl" style="margin: 0px; color: black; border: 1px solid black; font-size: 12px; font-family: &#39;malgun gothic&#39;, dotum, arial, tahoma; border-collapse: collapse !important; background: white;"><!-- User -->
-            <tbody><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">기안자</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:draftUser}}" data-id="draftUser" data-name="draftUser" data-value="이창화" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="이창화" value="이창화">${conn_id }</span></td></tr><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">기안일</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:draftDate}}" data-id="draftDate" data-name="draftDate" data-value="2018-08-27(월)" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018-08-27(월)" value="2018-08-27(월)">${formmat.getDate() }</span></td></tr><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">문서번호</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:docNo}}" data-id="docNo" data-name="docNo" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="" value=""></span></td></tr></tbody></table>
+            <tbody><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">기안자</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:draftUser}}" data-id="draftUser" data-name="draftUser" data-value="이창화" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="이창화" value="이창화">${USER_SESSION.getName() }</span></td></tr><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">기안일</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:draftDate}}" data-id="draftDate" data-name="draftDate" data-value="2018-08-27(월)" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018-08-27(월)" value="2018-08-27(월)"><span class="date"></span></span></td></tr><tr><td style="width:100px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; text-align: left; font-size: 12px; font-weight: bold; background: #ddd;">문서번호</td><td style="width:200px;padding: 3px !important; height: 25px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="system" data-dsl="{{label:docNo}}" data-id="docNo" data-name="docNo" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="" value=""></span></td></tr></tbody></table>
     </td><td style="width: 500px; text-align: right; padding: 0px!important; border: 0!important; vertical-align: middle !important" class=""><span class="sign_type1_inline" data-group-seq="0" data-group-name="신청" data-group-max-count="4" data-group-type="type1" data-is-reception="" style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 9pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><span class="sign_tit_wrap"><span class="sign_tit"><strong>신청</strong></span></span><span class="sign_member_wrap" id="activity_1602091"><span class="sign_member"><span class="sign_rank_wrap"><span class="sign_rank">팀원</span></span><span class="sign_wrap"><span class="sign_name"> <strong> 이창화 </strong> </span><span class="sign_position"> <strong> 과장 </strong> </span></span><span class="sign_date_wrap"><span class="sign_date " id="date_1602091">2018/08/27</span></span></span></span></span>
 
 	<span class="sign_type1_inline" data-group-seq="1" data-group-name="승인" data-group-max-count="7" data-group-type="type1" data-is-reception="" style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 9pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;"><span class="sign_tit_wrap"><span class="sign_tit"><strong>승인</strong></span></span><span class="sign_member_wrap" id="activity_1602092"><span class="sign_member"><span class="sign_rank_wrap"><span class="sign_rank">본부장</span></span><span class="sign_wrap"><span class="sign_name">권순진</span><span class="sign_position">상무보</span></span><span class="sign_date_wrap"><span class="sign_date " id="date_1602092"></span></span></span></span></span>
@@ -146,9 +130,9 @@
 <br><br></td></tr></tbody></table>
 </span><table class="__se_tbl" style="word-break:break-all; width: 800px; margin: 0px; background: white; border: 0px; font-size: 12px; font-family: &#39;malgun gothic&#39;, dotum, arial, tahoma; border-collapse: collapse !important;"><tbody><tr><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 100px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">대상 서비스</td><td style="word-break:break-all; background-image: 
 
-initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_3" data-name="editorForm_3" data-value="씨티은행 어드민" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="씨티은행 어드민">씨티은행&nbsp;어드민</span></td><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 120px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">기간</td><td style="word-break:break-all; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_4" data-name="editorForm_4" data-value="2018.08.20 ~ 2018.08.26" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018.08.20 ~ 2018.08.26">${formmat.getPeriod() }</span></td></tr><tr><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 100px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">작성일</td><td style="word-break:break-all; 
+initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_3" data-name="editorForm_3" data-value="씨티은행 어드민" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="씨티은행 어드민">씨티은행&nbsp;어드민</span></td><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 120px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">기간</td><td style="word-break:break-all; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_4" data-name="editorForm_4" data-value="2018.08.20 ~ 2018.08.26" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018.08.20 ~ 2018.08.26"><span id="period"></span></span></td></tr><tr><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 100px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">작성일</td><td style="word-break:break-all; 
 
-background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="calendar" data-dsl="{{calendar}}" data-id="editorForm_5" data-name="editorForm_5" data-value="2018-08-27(월)" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018-08-27(월)">${formmat.getDate()}</span></td><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 120px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">작성자</td><td style="word-break:break-all; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_6" data-name="editorForm_6" data-value="이창화" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="이창화">이창화</span></td></tr></tbody></table><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;">
+background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="calendar" data-dsl="{{calendar}}" data-id="editorForm_5" data-name="editorForm_5" data-value="2018-08-27(월)" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="2018-08-27(월)"><span class="date"></span></span></td><td style="word-break:break-all; background: rgb(221, 221, 221); border: 1px solid black; width: 120px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle; padding: 3px !important;">작성자</td><td style="word-break:break-all; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid black; width: 300px; height: 22px; vertical-align: middle; padding: 3px !important;"><span data-type="text" data-dsl="{{text}}" data-id="editorForm_6" data-name="editorForm_6" data-value="이창화" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="이창화">이창화</span></td></tr></tbody></table><span style="font-family: &quot;맑은 고딕&quot;; font-size: 10pt; line-height: normal; margin-top: 0px; margin-bottom: 0px;">
 
  <br><table style="border: 0px solid rgb(0, 0, 0); width: 800px; font-family: malgun gothic, dotum, arial, tahoma; margin-top: 10px; border-collapse: collapse;" border="1"><!-- 품의서 --> 
 
@@ -170,7 +154,7 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 https://citi.donutbook.co.kr/cbadmin/comm/login.do" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="씨티은행 어드민
 https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<br>https://citi.donutbook.co.kr/cbadmin/comm/login.do</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_10" data-name="editorForm_10" data-value="36회
 (29회)" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="36회
-(29회)">${formmat.getAccessTry()}회<br>(${formmat.getLoginY()}회)</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_11" data-name="editorForm_11" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="">${formmat.getOvertimeAccess()}회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_12" data-name="editorForm_12" data-value="18회" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="18회">${formmat.getExternalAccess()}회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_13" data-name="editorForm_13" data-value="3회" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="3회">${formmat.getUnAuthAccess()}회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_14" data-name="editorForm_14" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="">${formmat.getExAccessCount()}건</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_15" data-name="editorForm_15" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="">${formmat.getDownloadCount()}회</span></td></tr></tbody></table><p style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;"><br>
+(29회)"><span id="accessTry"></span>회<br>(<span id="loginY"></span>회)</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_11" data-name="editorForm_11" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""><span id="overtimeAccess"></span>회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_12" data-name="editorForm_12" data-value="18회" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="18회"><span id="externalAccess"></span>회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_13" data-name="editorForm_13" data-value="3회" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="3회"><span id="unAuthAccess"></span>회</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_14" data-name="editorForm_14" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""><span id="exAccessCount"></span>건</span></td><td style="padding: 3px !important; width: 100px; height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_15" data-name="editorForm_15" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""><span id="downloadCount"></span>회</span></td></tr></tbody></table><p style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;"><br>
 	<span style="font-weight: normal; border-top: medium none currentcolor; font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;"></span></p><p style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;"><span style="font-weight: normal; border-top: medium none currentcolor; font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;">▶ 점검 결과2 - 관리자 계정 점검</span>&nbsp; &nbsp; &nbsp;</p><table class="" style="margin : 0px; border-collapse: collapse !important; color: black; background: white; border: 0px; font-size: 12px; font-family: malgun gothic,dotum,arial,tahoma;"><tbody><tr><td style="background: #ddd; padding: 3px !important; border: 1px solid black; width: 180px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle;">서비스(관리자 URL)</td><td style="background: #ddd; padding: 3px !important; border: 1px solid black; width: 180px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle;">장기 미 접속 계정</td><td style="background: #ddd; padding: 3px !important; border: 1px solid black; width: 180px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle;">장기 미 접속 기간</td><td style="background: #ddd; padding: 3px !important; border: 1px solid black; width: 180px; height: 22px; text-align: center; font-weight: bold; vertical-align: middle;">비고</td></tr><tr><td style="padding: 3px !important;  height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_16" data-name="editorForm_16" data-value="씨티은행 어드민
 https://citi.donutbook.co.kr/cbadmin/comm/login.do" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select="씨티은행 어드민
 https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<br>https://citi.donutbook.co.kr/cbadmin/comm/login.do</span></td><td style="padding: 3px !important;  height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_17" data-name="editorForm_17" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""></span></td><td style="padding: 3px !important;  height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_18" data-name="editorForm_18" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""></span></td><td style="padding: 3px !important;  height: 60px; vertical-align: middle; border: 1px solid black; font-size: 12px; text-align: left;"><span data-type="textarea" data-dsl="{{textarea}}" data-id="editorForm_19" data-name="editorForm_19" data-value="" data-require="false" data-maxlength="" data-width="" data-defaultstr="" data-editable="true" data-select=""></span></td></tr></tbody></table><p style="font-family: &quot;malgun gothic&quot;, dotum, arial, tahoma; font-size: 11pt; line-height: 22px; margin-top: 0px; margin-bottom: 0px;"><br>
@@ -272,43 +256,12 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 	    </section> 
 </div>
 </div></body></html>
-=======
-						<!-- 주차별 날짜 보기 -->
-						<div class="pick_type_week" id="pick_type_week">
-							<select name="w_year" id="w_year" class="w_datepicker w_datepicker_year" onchange="makeWeekSelectOptions();">
-							<option value="2018" selected="selected">2018년</option>
-							</select>
-							<select name="w_month" id="w_month" class="w_datepicker w_datepicker_month" onchange="makeWeekSelectOptions();">
-								<option value="01">01월</option>
-								<option value="02">02월</option>
-								<option value="03">03월</option>
-								<option value="04">04월</option>
-								<option value="05">05월</option>
-								<option value="06">06월</option>
-								<option value="07">07월</option>
-								<option value="08">08월</option>
-								<option value="09" selected="selected">09월</option>
-								<option value="10">10월</option>
-								<option value="11">11월</option>
-								<option value="12">12월</option>
-							</select>
-							<select name="w_week" class="w_datepicker w_datepicker_week" id="w_week"></select>
-							<button id="searchByWeek" class="search_btn" onclick="searchAndWrite()">조회</button>
-						</div>
+						
 								
-						<!-- 원하는 기간 선택 -->	
-						<div class="pick_type_choice" id="pick_type_choice">
-							<input type="text" class="mydatepicker" id='mydatepicker' readonly="readonly" placeholder="원하는 날짜의 범위를 선택하세요.">
-							<button id="searchByChoice" class="search_btn" onclick="searchAndWrite()">조회</button>
-						</div>
+						
 					</div>
 				</div>
-				<div class="iframe_wrapper">
-					<iframe src="resources/doc/reportTemplate.html" height="100%" width="100%" frameborder="none" >
-						
-					</iframe>
->>>>>>> chaehee
-				</div>
+				
 			</div>		
 		</div>
 		<!--내용-->
@@ -325,7 +278,7 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 
 		function searchByWeek() {
 			var selected = $("#w_week option:selected").val();
-			var split = selected.split( "|");
+			var split = selected.split( "~");
 			var startDate = split[0];
 			var endDate = split[1];
 			var serviceName = $("#serviceList option:selected").val();
@@ -336,16 +289,29 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 				"serviceName" : serviceName
 			};
 			var json = JSON.stringify(data);
-			alert(json);
 			$.ajax({
-				url : "/document",
+				url : "/test",
 				type :"POST",
-				dataType : "json",
+				method : "POST",
+				contentType: "application/json",
 				data : json,
 				success : function(data) {
-					alert("전송완료");
-					var parse = JSON.parse(data)
-					alert(parse);
+					
+					var formmat = data.formmat;
+					var serviceList = data.serviceList;
+					console.log(formmat);
+					$('.date').text(formmat.date);
+					$('#period').text(formmat.period);
+					$('#accessTry').text(formmat.accessTry);
+					$('#loginY').text(formmat.loginY);
+					$('#exAccessCount').text(formmat.exAccessCount);
+					$('#exAccessId').text(formmat.exAccessId);
+					$('#downloadCount').text(formmat.downloadCount);
+					$('#externalAccess').text(formmat.externalAccess);
+					$('#unAuthAccess').text(formmat.unAuthAccess);
+					$('#externalIpList').text(formmat.externalIpList);
+					$('#unAuthIpList').text(formmat.unAuthIpList);
+					$('#overtimeAccess').text(formmat.overtimeAccess);
 				},
 				error : function(err){
 					alert("에러발생");

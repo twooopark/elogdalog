@@ -2,6 +2,7 @@ package com.edlog.boot.springboot.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.edlog.boot.springboot.DTO.DataDTO;
@@ -71,25 +72,14 @@ public class PageController {
 //		return "document";
 //	}
 
-	@PostMapping("/document")
+	@RequestMapping(value ="/document", method = RequestMethod.POST)
 	@ResponseBody
-	public String formmat(Model model, @RequestBody DataDTO data ) throws ParseException, IOException, JSONException {
-		String serviceName = "donutbook";
-		String startDate = "2018-08-13";
-		String endDate = "2018-08-15";
+	public Map<String, Object> document(@RequestBody DataDTO data ) throws ParseException, IOException, JSONException {
+		
+		String serviceName = data.getServiceName();
+		String startDate = data.getStartDate();
+		String endDate = data.getEndDate();
 		String fieldName = "action";
-		
-		System.out.println(data);
-//		"startDate" : startDate,
-//		"endDate" : endDate,
-//		"serviceName" : serviceName
-		
-//		try {
-//			jsonToString = json.get("data").toString();
-//			System.out.println(jsonToString);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
 		
 		//날짜 처리
 		String lastMonday = GetDate.getCurMonday();
@@ -140,8 +130,7 @@ public class PageController {
 		
 		//serviceList 얻기
 		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
-				
-		
+
 		//formmat 객체에 변수 셋팅
 		formmat.setDate(date);
 		formmat.setPeriod(period);
@@ -155,12 +144,23 @@ public class PageController {
 		formmat.setExternalIpList(externalIpList);
 		formmat.setUnAuthIpList(unAuthIpList);
 		formmat.setOvertimeAccess(overtimeAccess);
-		
-		
+		Map<String ,Object> map = new HashMap<>();
 		//model에 값 전달
-		model.addAttribute("formmat", formmat);
+		map.put("formmat", formmat);
+		map.put("hoho", "아니 왜 안되냐고!!!!!!!!!!!!!!!");
+		map.put("serviceList", serviceList);
+		map.put("serviceListSize", serviceList.size());
+		
+		return map;
+	}
+	
+	@RequestMapping(value ="/document", method = RequestMethod.GET)
+	public String doc(Model model) {
+		//serviceList 얻기
+		List<String> serviceList = gf.getServiceList("service.keyword").get("keyList");
 		model.addAttribute("serviceList", serviceList);
 		model.addAttribute("serviceListSize", serviceList.size());
+		
 		return "document";
 	}
 

@@ -100,9 +100,11 @@ public class GenerateForm {
 			String tempIp = (String) map.get("access_ip");
 
 			if (!ivcheck.checkOfficial(tempIp)) {
-				externalCount++;
-				externalIpList.add(tempIp);
-				if (!ivcheck.checkExternal(tempIp)) {
+				if (ivcheck.checkExternal(tempIp)) {
+					externalCount++;
+					externalIpList.add(tempIp);
+				}
+				else if (!ivcheck.checkExternal(tempIp)) {
 					unAuthCount++;
 					unAuthIpList.add(tempIp);
 				}
