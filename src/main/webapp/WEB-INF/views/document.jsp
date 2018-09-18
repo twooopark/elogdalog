@@ -290,7 +290,7 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 			};
 			var json = JSON.stringify(data);
 			$.ajax({
-				url : "/test",
+				url : "/document",
 				type :"POST",
 				method : "POST",
 				contentType: "application/json",

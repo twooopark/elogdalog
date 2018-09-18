@@ -41,9 +41,10 @@ public class PageController {
 	HttpSession session;
 
 	@RequestMapping("/")
-	public String home() {
+	public String home1() {
 		return "member/login";
 	}
+	
 //	@RequestMapping("/loginPage")
 //	public String loginPage() {
 //		return "member/login";
