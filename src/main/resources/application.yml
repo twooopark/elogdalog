@@ -2,7 +2,7 @@ server:
   port: 11311
   servlet:
     jsp:
-      init-parameters:
+      init-parameters: 
         development: true
   
 spring:
@@ -10,11 +10,7 @@ spring:
     cluster-name: MyElastic
     host: 127.0.0.1
     port : 9300
-#    cluster-name: Elog_application
-#    host: 175.115.95.93
     host2: 172.21.25.77
-    
-    
   mvc:
     view:
       prefix: /WEB-INF/views/
