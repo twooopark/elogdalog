@@ -93,11 +93,27 @@
 						</tr>
 						<tr>
 							<th scope="row">
-								<div id="access_date" class="bucket" ondrop="drop(event)"
+								<div id="file_date" class="bucket" ondrop="drop(event)"
 									ondragover="allowDrop(event)"></div>
 							</th>
-							<td>접근 일시</td>
-							<td>access_date</td>
+							<td>파일 생성일시</td>
+							<td>file_date</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div id="access_day" class="bucket" ondrop="drop(event)"
+									ondragover="allowDrop(event)"></div>
+							</th>
+							<td>접근 일/일시</td>
+							<td>access_day</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div id="access_time" class="bucket" ondrop="drop(event)"
+									ondragover="allowDrop(event)"></div>
+							</th>
+							<td>접근 시간</td>
+							<td>access_time</td>
 						</tr>
 						<tr>
 							<th scope="row">
@@ -163,7 +179,7 @@ var regSepInv;
 //var regIP = /((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})/g;
 
 //필드명, 필드데이터
-var fieldName = ["server","service","access_date","access_ip","access_id","access_uri","action","remark"];
+var fieldName = ["server","service","file_date","access_day","access_time","access_ip","access_id","access_uri","action","remark"];
 var fieldDatas = {};
 
 // fd,ldStr이 담길 배열
@@ -279,15 +295,37 @@ function singleFd(){
 		var fdInfoDoc = fdInfo.slice(0,-1);//filenameItem
 		var fdInfoSeq = fdInfo.charAt(fdInfo.length - 1);//3
 		
-		if(fdInfoDoc == "filenameItem")
-			fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");
-		else
-			ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
+		if(fdInfoDoc == "filenameItem"){
+			if(fieldName[fn] == "server")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "service")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "file_date")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{DATENUM1:"+fieldName[fn]+"}");
+			else
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");		
+		}
+		else{
+			if(fieldName[fn] == "access_ip")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{IPORHOST:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_id")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_day")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{DATENUM2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_time")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{TIME:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "server")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "service")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
+		}
 	}	
 }
 
-
-//필드 데이터가 여러개인 경우(주로, access_date)
+/*
+//필드 데이터가 여러 개인 경우(주로, access_date)
 function multipleFd(fn){
 	for (fd in fieldDatas[fn]){
 		var fdInfo = fieldDatas[fn][fd].id;
@@ -296,15 +334,20 @@ function multipleFd(fn){
 			var fdInfoDoc = fdInfo.slice(0,-1);//filenameItem
 			var fdInfoSeq = fdInfo.charAt(fdInfo.length - 1);//3
 			
-			if(fdInfoDoc == "filenameItem")
-				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");
-			else
-				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
+			if(fdInfoDoc == "filenameItem"){
+					fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");		
+			}
+			else{
+				if(fieldName[fn] == "access_ip")
+					ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{IPORHOST:"+fieldName[fn]+"}");
+				else
+					ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
+			}
 		}
 	}
-	console.log("m");
+	//console.log("multipleFd:"+fieldName[fn]);
 } 
-
+*/
 //필터 생성 시 실행
 function makeFilter(){
 	//각 필드마다 마우스로 drop한 필드 데이터에 대한 정보를 읽는다
@@ -312,11 +355,11 @@ function makeFilter(){
 	outputStrInitialize();
 	for (fn in fieldName){
 		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
-		console.log("fieldName[fn]: "+fieldName[fn]+"fieldDatas[fn].length: "+fieldDatas[fn].length);
+		//console.log("fieldName[fn]: "+fieldName[fn]+"fieldDatas[fn].length: "+fieldDatas[fn].length);
 		
-		if(fieldDatas[fn].length > 1)
-			multipleFd(fn);
-		else
+		//if(fieldDatas[fn].length > 1)
+		//	multipleFd(fn);
+		//else
 			singleFd(fn);
 	}
 
@@ -324,9 +367,12 @@ function makeFilter(){
 	fnList[0] = fnList[0].replace("{fnSep}","{fnSep}?");
 	ldList[0] = ldList[0].replace("{ldSep}","{ldSep}?");
 	
-	var fnStrOut = fnList.toString().replace(/,/g,"")+"$";
-	var ldStrOut = ldList.toString().replace(/,/g,"")+"$";
-	
+	var fnStrOut = "%{WINPATH:file_path}\\\\"+fnList.toString().replace(/,/g,"");//+"$";
+	var ldStrOut = ldList.toString().replace(/,/g,"");//+"$";
+	console.log("filenameStringOutput");
+	console.log(fnStrOut);
+	console.log("logdataStringOutput");
+	console.log(ldStrOut);
 	//send json
 	//jsonAjax();
 }
