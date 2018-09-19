@@ -1,6 +1,5 @@
 /*주차별 날짜 선택 AREA*/
 function makeWeekSelectOptions() {
-	console.log("asdf");
     var year = $("#w_year").val();
     var month = $("#w_month").val();
  
