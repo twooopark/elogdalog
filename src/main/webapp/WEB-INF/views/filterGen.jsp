@@ -5,6 +5,7 @@
 <head>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <style>
 .bucket {
 	height: 30px;
@@ -19,7 +20,6 @@
 </head>
 
 <body>
-
 	<div class="container theme-showcase" role="main">
 		<div class="jumbotron">
 			<h1>Logstash Filter Generator</h1>
@@ -93,11 +93,27 @@
 						</tr>
 						<tr>
 							<th scope="row">
-								<div id="access_date" class="bucket" ondrop="drop(event)"
+								<div id="file_date" class="bucket" ondrop="drop(event)"
 									ondragover="allowDrop(event)"></div>
 							</th>
-							<td>접근 일시</td>
-							<td>access_date</td>
+							<td>파일 생성일시</td>
+							<td>file_date</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div id="access_day" class="bucket" ondrop="drop(event)"
+									ondragover="allowDrop(event)"></div>
+							</th>
+							<td>접근 일/일시</td>
+							<td>access_day</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div id="access_time" class="bucket" ondrop="drop(event)"
+									ondragover="allowDrop(event)"></div>
+							</th>
+							<td>접근 시간</td>
+							<td>access_time</td>
 						</tr>
 						<tr>
 							<th scope="row">
@@ -147,10 +163,7 @@
 			</div>
 		</div>
 	</div>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script>
-
+<script>
 /*
 grok regex patterns example:
 	noSep [^\-\_\^\.\s\[\]\|\:]+
@@ -166,10 +179,10 @@ var regSepInv;
 //var regIP = /((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})/g;
 
 //필드명, 필드데이터
-var fieldName = ["server","service","access_date","access_ip","access_id","access_uri","action","remark"];
+var fieldName = ["server","service","file_date","access_day","access_time","access_ip","access_id","access_uri","action","remark"];
 var fieldDatas = {};
 
-// fd,ldStr들이 담길 배열(Item갯수만큼 만들어 놓고 내용을 수정하는 방식으로 할 것) 
+// fd,ldStr이 담길 배열
 var fnList = [];
 var ldList = [];
 
@@ -180,7 +193,7 @@ var ldCount;
 var jsonData = {};
 
 /*
-//extract seperator, 구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
+//extract seperator, 구분자 정보를 순서대로 추출
 function extSep(inputId, inputStr, inputItems){
 	var Items;
 	if(inputId == "filename")
@@ -190,10 +203,8 @@ function extSep(inputId, inputStr, inputItems){
 	
 	var result = "";
 	for (item in Items){
-		//console.log(inputId+" item["+item+"] : "+Items[item]+", "+inputItems[item]);
 		result += Items[item]+inputItems[item];
 	}
-	//console.log("result : "+result);
 }
 */
 
@@ -217,8 +228,6 @@ function outputStrInitialize(){
 		fnList.push(fnStr);
 	for (var i=0; i<ldCount; i++)		
 		ldList.push(ldStr);
-	
-	//str.replace(/,/g,'')
 }
 
 //구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
@@ -240,16 +249,15 @@ function splitInputSep(inputId){
 	    document.getElementById(inputId+"Items").innerHTML += txt;
 	}
 	
-	
 	/* 	
-	//추후에 필드 데이터들이 IP인지 판별하는 작업 등에 쓰일 듯(구분자와 데이터를 사용하여)
+	//추후에 필드 데이터들이 IP인지 판별하는 작업 등에 쓰일 예정(구분자와 데이터를 사용하여)
 	if(inputItems.length > 1)
 		var inputSep = extSep(inputId, inputStr, inputItems);
 	*/
 }
 
 //텍스트 분할 클릭 시 실행
-function startFilterGen(){ //이름 바꿔야함
+function startFilterGen(){
 	//입력받은 파일명, 로그데이터 init
 	var filenameStr = document.getElementById("filename").value;
 	var logdataStr = document.getElementById("logdata").value;
@@ -277,20 +285,48 @@ function startFilterGen(){ //이름 바꿔야함
 	outputStrInitialize()
 }
 
+
 //필드 데이터가 한 개인 경우
 function singleFd(){
 	var fdInfo = fieldDatas[fn][0];
 	if(typeof fdInfo != "undefined"){
-		jsonData[fieldName[fn]] = fdInfo.id;
+		fdInfo = fieldDatas[fn][0].id;
+		//fdInfo = filenameItem3 --(split)--> filenameItem , 3 
+		var fdInfoDoc = fdInfo.slice(0,-1);//filenameItem
+		var fdInfoSeq = fdInfo.charAt(fdInfo.length - 1);//3
+		
+		if(fdInfoDoc == "filenameItem"){
+			if(fieldName[fn] == "server")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "service")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "file_date")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{DATENUM1:"+fieldName[fn]+"}");
+			else
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");		
+		}
+		else{
+			if(fieldName[fn] == "access_ip")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{IPORHOST:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_id")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_day")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{DATENUM2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "access_time")
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{TIME:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "server")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else if(fieldName[fn] == "service")
+				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{WORD2:"+fieldName[fn]+"}");
+			else
+				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
+		}
 	}	
 }
 
-
-//필드 데이터가 여러개인 경우 (Object : List)
+/*
+//필드 데이터가 여러 개인 경우(주로, access_date)
 function multipleFd(fn){
-	
-	var jsonList = {};
-	//jsonList.keys("filename","logdata");
 	for (fd in fieldDatas[fn]){
 		var fdInfo = fieldDatas[fn][fd].id;
 		if(typeof fdInfo != "undefined"){
@@ -299,94 +335,44 @@ function multipleFd(fn){
 			var fdInfoSeq = fdInfo.charAt(fdInfo.length - 1);//3
 			
 			if(fdInfoDoc == "filenameItem"){
-				fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");
-				//console.log("fn:"+fn+" fd:"+fd+" fdInfoSeq:"+fdInfoSeq)
-				//fList.push(fdInfoSeq);
-				//jsonList[fdInfoDoc] = fList;
+					fnList[fdInfoSeq] = fnList[fdInfoSeq].replace("{fnSepInv}","{fnSepInv:"+fieldName[fn]+"}");		
 			}
 			else{
-				ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
-				//lList.push(fdInfoSeq);
-				//jsonList[fdInfoDoc] = lList;
+				if(fieldName[fn] == "access_ip")
+					ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{IPORHOST:"+fieldName[fn]+"}");
+				else
+					ldList[fdInfoSeq] = ldList[fdInfoSeq].replace("{ldSepInv}","{ldSepInv:"+fieldName[fn]+"}");
 			}
 		}
 	}
-
-	//jsonData[fieldName[fn]] = jsonList;
+	//console.log("multipleFd:"+fieldName[fn]);
 } 
-/*
-//결과물
-	jsonData =
-		{
-			"server": {
-				"filenameItem": ["0"]
-			},
-			"service": {
-				"filenameItem": ["3"]
-			},
-			"access_date": {
-				"filenameItem": ["6"],
-				"logdataItem": ["3", "4"]
-			},
-			"access_ip": {
-				"logdataItem": ["5", "6", "7", "8"]
-			},
-			"access_id": {
-				"logdataItem": ["1"]
-			},
-			"access_uri": {
-				"logdataItem": ["9", "10"]
-			},
-			"action": {
-				"logdataItem": ["11"]
-			},
-			"remark": {}
-		}
-
 */
-
 //필터 생성 시 실행
 function makeFilter(){
-	//각 필드마다 드랍된 필드 데이터에 대한 정보를 읽는다. (필터 생성에 필요함)
-	//필드 데이터들의 태그 id를 읽어,
-	//각 데이터들이 어떤 문자열인지와 순서, 어떤 필드를 나타내는지 알아낸다.
+	//각 필드마다 마우스로 drop한 필드 데이터에 대한 정보를 읽는다
+	//필드 데이터들의 태그 id를 통해 데이터 종류(*infoDoc), 순서(*infoSeq), 필드(fieldName[fn])를 알아내 필터 생성에 사용되는 문자열(*StrOut)을 만든다.
 	outputStrInitialize();
 	for (fn in fieldName){
 		fieldDatas[fn] = document.getElementById(fieldName[fn]).children;
-		console.log("fieldName[fn]: "+fieldName[fn]+"fieldDatas[fn].length: "+fieldDatas[fn].length);
-		//if(fieldName[fn] == "access_date" || fieldName[fn] == "access_ip" || fieldName[fn] == "access_uri")
-	 		multipleFd(fn);
-	 	//else 
-	 	//	singleFd();
+		//console.log("fieldName[fn]: "+fieldName[fn]+"fieldDatas[fn].length: "+fieldDatas[fn].length);
+		
+		//if(fieldDatas[fn].length > 1)
+		//	multipleFd(fn);
+		//else
+			singleFd(fn);
 	}
 
 	//맨 앞엔 구분자가 없을 수 있다.
 	fnList[0] = fnList[0].replace("{fnSep}","{fnSep}?");
 	ldList[0] = ldList[0].replace("{ldSep}","{ldSep}?");
 	
-	var fnStrOut = fnList.toString().replace(/,/g,"")+"$";
-	var ldStrOut = ldList.toString().replace(/,/g,"")+"$";
-	
-	//[2018-08-16 15:57:51] jwmoon|172.21.25.207|/synergy/content/callerbook/limit_list
-	
-	/*
-	%{fnSep}?%{fnSepInv:server}
-	%{fnSep}%{fnSepInv}
-	%{fnSep}%{fnSepInv:service}
-	%{fnSep}%{fnSepInv}
-	%{fnSep}%{fnSepInv}
-	%{fnSep}%{fnSepInv}
-	%{fnSep}%{fnSepInv}
-	%{fnSep}%{fnSepInv}$
-	*/
-	/*
-	%{ldSep}?%{ldSepInv:access_date}
-	%{ldSep}%{ldSepInv:access_date}
-	%{ldSep}%{ldSepInv:access_id}
-	%{ldSep}%{ldSepInv:access_ip}
-	%{ldSep}%{ldSepInv:access_uri}
-	*/
-	
+	var fnStrOut = "%{WINPATH:file_path}\\\\"+fnList.toString().replace(/,/g,"");//+"$";
+	var ldStrOut = ldList.toString().replace(/,/g,"");//+"$";
+	console.log("filenameStringOutput");
+	console.log(fnStrOut);
+	console.log("logdataStringOutput");
+	console.log(ldStrOut);
 	//send json
 	//jsonAjax();
 }
@@ -395,7 +381,6 @@ function jsonAjax(){
 	$.ajax({
 	    url:"filterGenForm",
 	    type:'POST',
-// 	  	dataType:'json',
 	    data:jsonData,
 	    success:function(res){
 	    	alert(res);
@@ -406,6 +391,7 @@ function jsonAjax(){
 	});
 }
 
+//drag & drop
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -422,7 +408,7 @@ function drop(ev) {
 
 /* 
 //필드 데이터가 여러개인 경우(Object, String)
-function multipleFd1(fn){
+function multipleFd2(fn){
 	var jsonList = "";
 	for (fd in fieldDatas[fn]){
 		var fdInfo = fieldDatas[fn][fd].id;
@@ -434,154 +420,20 @@ function multipleFd1(fn){
 		jsonData[fieldName[fn]] = jsonList.slice(0,-1);
 }
 // 결과물
-
- 	jsonData = 
-		{
-		  "server": "filenameItem0",
-		  "service": "filenameItem3",
-		  "access_date": "filenameItem6,logdataItem3,logdataItem4",
-		  "access_ip": "logdataItem5,logdataItem6,logdataItem7,logdataItem8",
-		  "access_id": "logdataItem1",
-		  "access_uri": "logdataItem9,logdataItem10",
-		  "action": "logdataItem11",
-		  "remark": "logdataItem12"
-		}
+jsonData = 
+	{
+	  "server": "filenameItem0",
+	  "service": "filenameItem3",
+	  "access_date": "filenameItem6,logdataItem3,logdataItem4",
+	  "access_ip": "logdataItem5,logdataItem6,logdataItem7,logdataItem8",
+	  "access_id": "logdataItem1",
+	  "access_uri": "logdataItem9,logdataItem10",
+	  "action": "logdataItem11",
+	  "remark": "logdataItem12"
+	}
 
 */
 
-
-/*
-//필드 데이터가 여러개인 경우(List Object)
-function multipleFd2(fn){
-	var fList = {};
-	var lList = {};
-	var jsonList = [];
-	//jsonList.keys("filename","logdata");
-	for (fd in fieldDatas[fn]){
-		var fdInfo = fieldDatas[fn][fd].id;
-		if(typeof fdInfo != "undefined"){
-			//filenameItem3 >> filenameItem , 3 split
-			var fdInfoDoc = fdInfo.replace(/[0-9]+/g,"");
-			var fdInfoSeq = fdInfo.replace(/[^0-9]+/g,"");
-			if(fdInfoDoc == "filenameItem"){
-				fList[fdInfoDoc] = fdInfoSeq;
-				jsonList.push(fList);
-			}
-			else{
-				lList[fdInfoDoc] = fdInfoSeq;
-				jsonList.push(lList);
-				
-			}
-		}
-	}
-	jsonData[fieldName[fn]] = jsonList;
-	console.log(jsonData);
-}
-//결과물
-	jsonData =
-		{
-		  "server": [
-		    {
-		      "filenameItem": "0"
-		    }
-		  ],
-		  "service": [
-		    {
-		      "filenameItem": "3"
-		    }
-		  ],
-		  "access_date": [
-		    {
-		      "filenameItem": "6"
-		    },
-		    {
-		      "logdataItem": "4"
-		    }
-		  ],
-		  "access_ip": [
-		    {
-		      "logdataItem": "8"
-		    },
-		    {
-		      "logdataItem": "8"
-		    },
-		    {
-		      "logdataItem": "8"
-		    },
-		    {
-		      "logdataItem": "8"
-		    }
-		  ],
-		  "access_id": [
-		    {
-		      "logdataItem": "1"
-		    }
-		  ],
-		  "access_uri": [
-		    {
-		      "logdataItem": "10"
-		    },
-		    {
-		      "logdataItem": "10"
-		    }
-		  ],
-		  "action": [
-		    {
-		      "logdataItem": "11"
-		    }
-		  ],
-		  "remark": [
-		    {
-		      "logdataItem": "12"
-		    }
-		  ]
-		}
-*/
-
-
-/*
-//구분자에 따라 입력받은 파일명과 로그데이터를 나눈다.
-function splitInputSep(){
-	//입력한 파일명, 로그데이터
-	var filename_str = document.getElementById("filename").value;
-	var logdata_str = document.getElementById("logdata").value;
-
-	//구분자에 따라 분할
-	var filename_items = filename_str.split(reg);
-	//Items > span 초기화
-	document.getElementById("filenameItems").innerHTML = "";
-	//드래그할 item 생성
-	for (item in filename_items){
-	    var txt = "<span id=\"filenameItem"+item+"\" class=\"item\" draggable=\"true\" ondragstart=\"drag(event)\">"+filename_items[item]+"</span>";
-	    document.getElementById("filenameItems").innerHTML += txt;
-	}
-
-	//구분자에 따라 분할
-	var logdata_items = logdata_str.split(reg)
-	//Items > span 초기화
-	document.getElementById("logdataItems").innerHTML = "";
-	for (item in logdata_items){
-	    var txt = "<span id=\"logdataItem"+item+"\" class=\"item\" draggable=\"true\" ondragstart=\"drag(event)\">"+logdata_items[item]+"</span>";
-	    document.getElementById("logdataItems").innerHTML += txt;
-	}
-	
-	//extract seperator
-	extSep();
-	
-}
-
-//구분자 정보를 순서대로 추출하여, 필터를 생성할 때 사용한다.
-function extSep(){
-	
-}
-
-function makeFilter(){
-	console.log($("#server > span").text());
-	
-	
-	$("#filterGenForm").submit();
-}
-*/
 </script>
 </body>
 </html>
