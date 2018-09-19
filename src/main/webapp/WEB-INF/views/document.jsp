@@ -314,7 +314,7 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 					$('#overtimeAccess').text(formmat.overtimeAccess);
 				},
 				error : function(err){
-					alert("에러발생");
+					alert("기간 및 서비스명을 설정해주세요");
 				}
 			});
 		}

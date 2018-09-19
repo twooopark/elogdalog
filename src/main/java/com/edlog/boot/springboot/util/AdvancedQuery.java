@@ -58,9 +58,8 @@ public class AdvancedQuery {
 	}
 
 	// script데이터 리턴
-	public int getScriptData(String serviceName, String startDate, String endDate)
-			throws UnknownHostException {
-		QueryBuilder queryBuilder = qs.getMMnBoolQuery(qs.formFilter(serviceName, startDate, endDate), 
+	public int getScriptData(String serviceName, String startDate, String endDate) throws UnknownHostException {
+		QueryBuilder queryBuilder = qs.getMMnBoolQuery(qs.formFilter(serviceName, startDate, endDate),
 				QueryBuilders.scriptQuery(new Script("doc.access_date.date.getHourOfDay() >= 8  "
 						+ "&& doc.access_date.date.getHourOfDay() < 19 && doc.access_date.date.getDayOfWeek() < 6")));
 
@@ -68,13 +67,13 @@ public class AdvancedQuery {
 		List<Map<String, Object>> list = rs.getResponseAsList(sr);
 		return list.size();
 	}
-	
-	// BucketList 리턴
+
+	//서비스 BucketList 리턴
 	public Map<String, List<String>> getBucketList(String fieldName) {
 		TermsAggregationBuilder aggregation = as.getTermsAggregation("service", fieldName);
 		SearchResponse sr = rs.getSearchResponseWithAggs(aggregation);
-		
-		Map<String, List<String>> map = rs.getBucketAsMap(sr, "service");
+
+		Map<String, List<String>> map = rs.getAllBucketAsMap(sr, "service");
 		return map;
 	}
 
@@ -89,8 +88,8 @@ public class AdvancedQuery {
 		return tempList;
 	}
 
-	// Bucket을 가공하지 않은 map형태로 리턴
-	public Map<String, List<String>> getAllBucketAsMap(String serviceName, String startDate, String endDate,
+	// 과다조회 map형태로 리턴
+	public Map<String, List<String>> getExBucketAsMap(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
 
 		QueryBuilder queryBuilder = qs.getMBoolQuery(qs.formFilter(serviceName, startDate, endDate));
@@ -98,8 +97,8 @@ public class AdvancedQuery {
 
 		SearchResponse sr = rs.getSearchResponseIncludeAggs(queryBuilder, aggregation);
 
-		Map<String, List<String>> map = rs.getBucketAsMap(sr, "accessId");
-		
+		Map<String, List<String>> map = rs.getBucketAsExMap(sr, "accessId");
+
 		return map;
 	}
 }

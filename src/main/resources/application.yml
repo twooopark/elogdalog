@@ -54,3 +54,8 @@ spring:
     cluster-name: Elog_application
     host: 175.115.95.93
     port : 9300
+    
+my:
+  properties: 
+     index: elog_index_2018.09.14
+     type: elog_doctype

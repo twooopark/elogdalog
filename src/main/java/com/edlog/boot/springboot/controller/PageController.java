@@ -2,6 +2,7 @@ package com.edlog.boot.springboot.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,13 @@ public class PageController {
 	MemberServiceImpl Mservice;
 	@Autowired
 	HttpSession session;
+	
+	private Map<String, List<String>> ipListMap = new HashMap<String, List<String>>();
+	private Map<String, String> exAccess = new HashMap<String, String>();
+	private List<String> serviceList = new ArrayList<String>();
+	private List<String> ipValidationList = new ArrayList<String>();
+	private Map<String, String> loginMap = new HashMap<String, String>();
+	private Map<String, Object> fommatMap = new HashMap<>();
 
 	@RequestMapping("/")
 	public String home1() {
@@ -59,26 +67,28 @@ public class PageController {
 	@PostMapping(value = "/document")
 	@ResponseBody
 	public Map<String, Object> document(@RequestBody DataDTO data) throws ParseException, IOException, JSONException {
-
-		// 날짜 처리
-		String lastMonday = GetDate.getCurMonday();
-		String lastSunday = GetDate.getCurSunday();
-		String period = lastMonday + " ~ " + lastSunday;
+		ipListMap.clear();
+		exAccess.clear();
+		serviceList.clear();
+		ipValidationList.clear();
+		loginMap.clear();
+		
 		String date = GetDate.getCurDay();
-
+		
 		// 넘겨받은 데이터 변수에 세팅
 		String serviceName = data.getServiceName();
 		String startDate = data.getStartDate();
 		String endDate = data.getEndDate();
+		String period = startDate + " ~ " + endDate;
 		String fieldName = "action";
 
-		Map<String, String> loginMap = gf.getLoginData(serviceName, startDate, endDate, fieldName);
+		loginMap = gf.getLoginData(serviceName, startDate, endDate, fieldName);
 		int downloadCount = gf.getDownloadCount(serviceName, startDate, endDate, fieldName);
 		int overtimeAccess = gf.getOvertimeAccess(serviceName, startDate, endDate);
-		List<String> serviceList = gf.getServiceList(fieldName);
-		Map<String, String> exAccess = gf.getExcessiveAccess(serviceName, startDate, endDate, fieldName);
-		Map<String, List<String>> ipListMap = gf.getIpValidation(serviceName, startDate, endDate);
-		List<String> ipValidationList = ipListMap.get("countList");
+		serviceList = gf.getServiceList(fieldName);
+		exAccess = gf.getExcessiveAccess(serviceName, startDate, endDate, fieldName);
+		ipListMap = gf.getIpValidation(serviceName, startDate, endDate);
+		ipValidationList = ipListMap.get("countList");
 
 		// formmat 객체에 변수 셋팅
 		formmat.setDate(date);
@@ -96,12 +106,10 @@ public class PageController {
 		formmat.setServiceList(serviceList);
 		formmat.setServiceListSize(serviceList.size());
 
-		Map<String, Object> map = new HashMap<>();
-
 		// model에 값 전달
-		map.put("formmat", formmat);
+		fommatMap.put("formmat", formmat);
 
-		return map;
+		return fommatMap;
 	}
 
 	@GetMapping(value = "/document")
