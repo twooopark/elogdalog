@@ -32,14 +32,14 @@
 							<tr style="height:20px;"><td><span style="color:red" id="idMsg"></span></td></tr>
 							<tr>
 								<td>
-									<input type="password" id="password" name="password" maxlength="14" placeholder="비밀번호">
+									<input type="password" id="password" name="password" maxlength="14" placeholder="비밀번호" >
 								</td>
 							</tr>
 							<tr style="height:20px;"><td><span style="color:red" id="pwMsg"></span></td></tr>
 						</table>
 						<!--login panel submit wrapper-->
 						<div class="submit-wrapper">
-							<input type="submit" class="submit-button" value="로그인"/>
+							<input type="button" class="submit-button" value="로그인" id="submit_btn" />
 						</div>
 					</form>
 				</div>
@@ -48,7 +48,7 @@
 	</div>
 	<script>
 	$(function(){
-		$("#loginForm").submit(function(){
+		$("#submit_btn").click(function(){
 			console.log("asdf");
 			if($.trim($("#id").val())=="")
 			{
@@ -93,6 +93,10 @@
 			$("#pwMsg").text("");
 		})	
 	})
+	
+	function loginFormCheck(){
+		
+	}
 </script>
 </body>
 </html>

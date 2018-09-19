@@ -10,7 +10,7 @@
 <body>
 <%
 	if(session.getAttribute("USER_SESSION")==null){
-		response.sendRedirect("/member/loginPage");
+		response.sendRedirect("/");
 	}
 %>
 	<!--HOMEPAGE-->

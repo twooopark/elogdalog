@@ -16,7 +16,7 @@
 <body>
 <%
 	if(session.getAttribute("USER_SESSION")==null){
-		response.sendRedirect("/member/loginPage");
+		response.sendRedirect("/");
 	}
 %>
 	<!--HOMEPAGE-->
@@ -30,7 +30,7 @@
 			<div class="content_menu">
 				<ul>
 					<li><button onclick="location.href='/document'">DOCUMENT</button></li>
-					<li><button onclick="location.href='/analyze'">GRAPH</button></li>
+					<li><button onclick="location.href='/analyze'">DASHBOARD</button></li>
 				</ul>
 			</div>
 			<!--내용 보여주는 곳-->

@@ -43,10 +43,6 @@ public class PageController {
 	public String home() {
 		return "member/login";
 	}
-//	@RequestMapping("/loginPage")
-//	public String loginPage() {
-//		return "member/login";
-//	}
 
 	@RequestMapping("/homepage")
 	public String homepage() {
