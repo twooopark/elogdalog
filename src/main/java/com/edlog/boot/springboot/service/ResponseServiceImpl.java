@@ -24,24 +24,26 @@ public class ResponseServiceImpl implements ResponseService {
 
 	@Autowired
 	ESConfig esConfig;
-	
+
 	@Value("${my.properties.index}")
 	private String index;
 	@Value("${my.properties.type}")
 	private String type;
-	
+
 	@Override
 	public SearchResponse getSearchResponseWithQuery(QueryBuilder query) {
+
 		Client client = null;
 		try {
 			client = esConfig.client();
 		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setQuery(query).setSize(1000).get();
 		return sr;
 	}
-	
+
 	@Override
 	public SearchResponse getSearchResponseWithAggs(AggregationBuilder aggs) {
 		Client client = null;
@@ -78,7 +80,25 @@ public class ResponseServiceImpl implements ResponseService {
 	}
 
 	@Override
-	public Map<String, List<String>> getBucketAsMap(SearchResponse sr, String aggsName) {
+	public Map<String, List<String>> getAllBucketAsMap(SearchResponse sr, String aggsName) {
+		List<String> keyList = new ArrayList<String>();
+		List<String> docCountList = new ArrayList<String>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Terms terms = sr.getAggregations().get(aggsName);
+		for (Bucket entry : terms.getBuckets()) {
+
+			keyList.add(entry.getKeyAsString());
+			docCountList.add(Long.toString(entry.getDocCount()));
+
+		}
+		map.put("keyList", keyList);
+		map.put("docCountList", docCountList);
+
+		return map;
+	}
+
+	@Override
+	public Map<String, List<String>> getBucketAsExMap(SearchResponse sr, String aggsName) {
 		List<String> keyList = new ArrayList<String>();
 		List<String> docCountList = new ArrayList<String>();
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
@@ -91,7 +111,7 @@ public class ResponseServiceImpl implements ResponseService {
 		}
 		map.put("keyList", keyList);
 		map.put("docCountList", docCountList);
-		
+
 		return map;
 	}
 

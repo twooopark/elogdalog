@@ -17,5 +17,7 @@ public interface ResponseService {
 
 	public List<Map<String, Object>> getResponseAsList(SearchResponse sr);
 	
-	public Map<String, List<String>> getBucketAsMap(SearchResponse sr, String aggsName);
+	public Map<String, List<String>> getBucketAsExMap(SearchResponse sr, String aggsName);
+	
+	public Map<String, List<String>> getAllBucketAsMap(SearchResponse sr, String aggsName);
 }
