@@ -18,11 +18,11 @@
 			<div class="loginbox-wrapper">
 				<!-- login panel top wrapper to insert image-->
 				<div class="image-wrapper">
-					<img src="../resources/images/daouLogo.png" alt="다우기술 로고" width="250px">
+					<img src="/resources/images/daouLogo.png" alt="다우기술 로고" width="250px">
 				</div>
 				<!-- login panel content wrapper to insert input form-->
 				<div class="form-wrapper">
-					<form id="loginForm" method="post">
+					<form method="post" >
 						<table>
 							<tr>
 								<td>
@@ -39,7 +39,7 @@
 						</table>
 						<!--login panel submit wrapper-->
 						<div class="submit-wrapper">
-							<input type="button" class="submit-button" value="로그인" id="submit_btn" />
+							<input type="button" class="submit-button" value="로그인" id="submitForm" />
 						</div>
 					</form>
 				</div>
@@ -47,52 +47,49 @@
 		</div>
 	</div>
 	<script>
-	$(function(){
-		$("#submit_btn").click(function(){
-			console.log("asdf");
-			if($.trim($("#id").val())=="")
-			{
-				/*아이디 입력 하지 않음*/
-				$("#idMsg").text("아이디를 입력하세요");
+	$("#submitForm").click(function(){
+		if($.trim($("#id").val())=="")
+		{
+			/*아이디 입력 하지 않음*/
+			$("#idMsg").text("아이디를 입력하세요");
+			return false;
+		}
+		else
+		{
+			/*패스워드 입력 하지 않음*/
+			if($.trim($("#password").val())==""){
+				$("#pwMsg").text("패스워드를 입력하세요");
 				return false;
-			}
-			else
-			{
-				/*패스워드 입력 하지 않음*/
-				if($.trim($("#password").val())==""){
-					$("#pwMsg").text("패스워드를 입력하세요");
-					return false;
-				}else{
-					/*로그인 로직 with Ajax*/
-					$.ajax({
-						url : "/member/loginCheck",
-						type : "post",
-						data : { 	
-								id : $("#id").val(),
-								password : $("#password").val()
-							   },
-						success : function(result){
-							/*로그인 성공*/
-							if(result==1){
-								location.href="/homepage";
-							}else{
-								alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
-								return false;
-							}
+			}else{
+				/*로그인 로직 with Ajax*/
+				$.ajax({
+					url : "/member/loginCheck",
+					type : "post",
+					data : { 	
+							id : $("#id").val(),
+							password : $("#password").val()
+						   },
+					success : function(result){
+						/*로그인 성공*/
+						if(result==1){
+							location.href="/homepage";
+						}else{
+							alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+							return false;
 						}
-					})
-				}
+					}
+				})
 			}
-		})
-		
-		$("#id").keyup(function(){
-			$("#idMsg").text("");
-		})
-		
-		$("#password").keyup(function(){
-			$("#pwMsg").text("");
-		})	
+		}
+	})	
+	
+	$("#id").keyup(function(){
+		$("#idMsg").text("");
 	})
+	
+	$("#password").keyup(function(){
+		$("#pwMsg").text("");
+	})	
 </script>
 </body>
 </html>

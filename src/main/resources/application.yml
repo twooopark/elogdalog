@@ -2,19 +2,15 @@ server:
   port: 11311
   servlet:
     jsp:
-      init-parameters:
+      init-parameters: 
         development: true
   
 spring:
   elasticsearch:
-#    cluster-name: MyElastic
-#    host: 127.0.0.1
+    cluster-name: MyElastic
+    host: 127.0.0.1
     port : 9300
-    cluster-name: Elog_application
-    host: 175.115.95.93
     host2: 172.21.25.77
-    
-    
   mvc:
     view:
       prefix: /WEB-INF/views/
@@ -49,4 +45,17 @@ check:
        - 172.21.25.79
        - 172.21.25.121
        - 172.21.25.225
+       
+---
 
+spring:
+  profiles: dev
+  elasticsearch:
+    cluster-name: Elog_application
+    host: 175.115.95.93
+    port : 9300
+    
+my:
+  properties: 
+     index: elog_index_2018.09.14
+     type: elog_doctype
