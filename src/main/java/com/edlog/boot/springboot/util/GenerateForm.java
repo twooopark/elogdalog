@@ -25,76 +25,72 @@ import com.edlog.boot.springboot.service.ResponseServiceImpl;
 public class GenerateForm {
 
 	@Autowired
-	ESConfig esConfig;
-	@Autowired
-	QueryServiceImpl qs;
-	@Autowired
-	AggregationServiceImpl as;
-	@Autowired
-	ResponseServiceImpl rs;
+	AdvancedQuery aq;
 	@Autowired
 	IpValidationCheck ivcheck;
 
-	@Value("${my.properties.index}")
-	private String index;
-	@Value("${my.properties.type}")
-	private String type;
 	private int externalCount = 0;
 	private int unAuthCount = 0;
+	private int loginY = 0;
+	private int loginN = 0;
+	private int accessTry = 0;
+	private int downloadCount = 0;
+	private int overtimeAccess = 0;
+	private String exAccessCount = "";
+	private String exAccessId = "";
+	private List<String> keyList = new ArrayList<String>();
+	private List<String> docCountList = new ArrayList<String>();
+	private List<String> countList = new ArrayList<String>();
+	private Map<String, String> loginMap = new HashMap<String, String>();
+	private Map<String, List<String>> ipListMap = new HashMap<String, List<String>>();
 	private List<String> externalIpList = new ArrayList<String>();
 	private List<String> unAuthIpList = new ArrayList<String>();
+	private Map<String, List<String>> exAccess = new HashMap<String, List<String>>();
 
-	// text데이터 리턴
-	public int getTextData(String serviceName, String startDate, String endDate, String fieldName, String value)
+	// 로그인 데이터 처리
+	public Map<String, String> getLoginData(String serviceName, String startDate, String endDate, String fieldName)
 			throws UnknownHostException {
-		QueryBuilder queryBuilder = qs.getMMBoolQuery(qs.formFilter(serviceName, startDate, endDate),
-				qs.getTermQuery(fieldName, value));
-		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
-		List<Map<String, Object>> list = rs.getResponseAsList(sr);
-		return list.size();
-	}
-
-	// keyword데이터 리턴
-	public int getKeywordData(String serviceName, String startDate, String endDate, String fieldName, String value)
-			throws UnknownHostException {
-		fieldName = fieldName + ".keyword";
-		QueryBuilder queryBuilder = qs.getMMBoolQuery(qs.formFilter(serviceName, startDate, endDate),
-				qs.getTermQuery(fieldName, value));
-		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
-		List<Map<String, Object>> list = rs.getResponseAsList(sr);
-		return list.size();
-	}
-
-	// script데이터 리턴
-	public int getScriptData(String serviceName, String startDate, String endDate)
-			throws UnknownHostException {
-		QueryBuilder queryBuilder = qs.getMMnBoolQuery(qs.formFilter(serviceName, startDate, endDate), 
-				QueryBuilders.scriptQuery(new Script("doc.access_date.date.getHourOfDay() >= 8  "
-						+ "&& doc.access_date.date.getHourOfDay() < 19 && doc.access_date.date.getDayOfWeek() < 6")));
-
-		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
-		List<Map<String, Object>> list = rs.getResponseAsList(sr);
-		return list.size();
-	}
-	// ServiceNameList 리턴
-	public Map<String, List<String>> getServiceList(String fieldName) {
-		TermsAggregationBuilder aggregation = as.getTermsAggregation("service", fieldName);
-		SearchResponse sr = rs.getSearchResponseWithAggs(aggregation);
 		
-		Map<String, List<String>> map = rs.getBucketAsMap(sr, "service");
-		return map;
+		loginY = aq.getTextData(serviceName, startDate, endDate, fieldName, "login_y");
+		loginN = aq.getTextData(serviceName, startDate, endDate, fieldName, "login_n");
+		accessTry = loginN + loginY;
+		loginMap.put("loginY", Integer.toString(loginY));
+		loginMap.put("accessTry", Integer.toString(accessTry));
+		
+		return loginMap;
+	}
+
+	// 개인정보 다운로드 데이터 처리
+	public int getDownloadCount(String serviceName, String startDate, String endDate, String fieldName)
+			throws UnknownHostException {
+
+		downloadCount = aq.getKeywordData(serviceName, startDate, endDate, fieldName, "excelDownload");
+
+		return downloadCount;
+	}
+
+	// 근무시간 외 접근 판단
+	public int getOvertimeAccess(String serviceName, String startDate, String endDate)
+			throws UnknownHostException {
+
+		overtimeAccess = aq.getScriptData(serviceName, startDate, endDate);
+
+		return overtimeAccess;
+	}
+	
+	// ServiceNameList 리턴
+	public List<String> getServiceList(String fieldName) {
+
+		List<String> serviceList = aq.getBucketList("service.keyword").get("keyList");
+		
+		return serviceList;
 	}
 
 	// ip체크 결과 리턴
 	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate)
 			throws UnknownHostException {
 
-		Map<String, List<String>> listMap = new HashMap<String, List<String>>();
-		QueryBuilder queryBuilder = qs.getMBoolQuery(qs.formFilter(serviceName, startDate, endDate));
-		SearchResponse sr = rs.getSearchResponseWithQuery(queryBuilder);
-
-		List<Map<String, Object>> tempList = rs.getResponseAsList(sr);
-		List<String> countList = new ArrayList<String>();
+		List<Map<String, Object>> tempList = aq.getReponseToList(serviceName, startDate, endDate);
 
 		for (Map<String, Object> map : tempList) {
 			String tempIp = (String) map.get("access_ip");
@@ -113,23 +109,37 @@ public class GenerateForm {
 		countList.add(Integer.toString(externalCount));
 		countList.add(Integer.toString(unAuthCount));
 
-		listMap.put("countList", countList);
-		listMap.put("externalIpList", externalIpList);
-		listMap.put("unAuthIpList", unAuthIpList);
+		ipListMap.put("countList", countList);
+		ipListMap.put("countList", countList);
+		ipListMap.put("externalIpList", externalIpList);
+		ipListMap.put("unAuthIpList", unAuthIpList);
 
-		return listMap;
+		return ipListMap;
 	}
 
-	// 과다조회 결과 리턴
-	public Map<String, List<String>> getExcessiveAccess(String serviceName, String startDate, String endDate,
+	// 과다 조회 데이터 처리
+	public Map<String, String> getExcessiveAccess(String serviceName, String startDate, String endDate,
 			String fieldName) throws IOException {
-
-		QueryBuilder queryBuilder = qs.getMBoolQuery(qs.formFilter(serviceName, startDate, endDate));
-		TermsAggregationBuilder aggregation = as.getTermsAggregation("accessId", fieldName);
-
-		SearchResponse sr = rs.getSearchResponseIncludeAggs(queryBuilder, aggregation);
-
-		Map<String, List<String>> map = rs.getBucketAsMap(sr, "accessId");
+		
+		Map<String, List<String>> exAccess = aq.getAllBucketAsMap(serviceName, startDate, endDate,
+				"access_id.keyword");
+		
+		
+		if (!exAccess.isEmpty()) {
+			keyList = exAccess.get("keyList");
+			System.out.println(keyList.get(0));
+			docCountList = exAccess.get("docCountList");
+			exAccessCount = Integer.toString(keyList.size());
+			for (int i = 0; i < keyList.size(); i++) {
+				exAccessId += keyList.get(i) + "(" + docCountList.get(i) + "회)<br/>";
+			}
+		} else {
+			exAccessCount = "0";
+			exAccessId = "내역 없음";
+		}
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("exAccessCount", exAccessCount);
+		map.put("exAccessId", exAccessId);
 		
 		return map;
 	}

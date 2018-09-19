@@ -20,6 +20,8 @@ public class FormDTO implements Serializable {
 	private List<String> externalIpList;
 	private List<String> unAuthIpList;
 	private int overtimeAccess;
+	private List<String> serviceList;
+	private int serviceListSize;
 	
 	//기본생성자
 	public FormDTO() {
@@ -28,7 +30,8 @@ public class FormDTO implements Serializable {
 	//모든 필드 이용한 생성자
 	public FormDTO(String date, String period, int accessTry, int loginY, String exAccessCount, String exAccessId,
 			int downloadCount, String externalAccess, String unAuthAccess, List<String> externalIpList,
-			List<String> unAuthIpList, int overtimeAccess) {
+			List<String> unAuthIpList, int overtimeAccess, List<String> serviceList, int serviceListSize) {
+		super();
 		this.date = date;
 		this.period = period;
 		this.accessTry = accessTry;
@@ -41,6 +44,8 @@ public class FormDTO implements Serializable {
 		this.externalIpList = externalIpList;
 		this.unAuthIpList = unAuthIpList;
 		this.overtimeAccess = overtimeAccess;
+		this.serviceList = serviceList;
+		this.serviceListSize = serviceListSize;
 	}
 	
 	public String getDate() {
@@ -137,6 +142,22 @@ public class FormDTO implements Serializable {
 
 	public void setOvertimeAccess(int overtimeAccess) {
 		this.overtimeAccess = overtimeAccess;
+	}
+
+	public List<String> getServiceList() {
+		return serviceList;
+	}
+
+	public void setServiceList(List<String> serviceList) {
+		this.serviceList = serviceList;
+	}
+
+	public int getServiceListSize() {
+		return serviceListSize;
+	}
+
+	public void setServiceListSize(int serviceListSize) {
+		this.serviceListSize = serviceListSize;
 	}
 
 	@Override
