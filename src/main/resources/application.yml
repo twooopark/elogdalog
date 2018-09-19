@@ -22,11 +22,12 @@ spring:
     username: websvc1
     password: websvc1
         
-
 my:
   properties: 
      index: elog_index_2018.09.13
      type: elog_doctype
+  standard:
+     exstandard: 10
 
 check:
   ip:

@@ -1,6 +1,7 @@
 package com.edlog.boot.springboot.controller;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,13 +42,16 @@ public class PageController {
 	MemberServiceImpl Mservice;
 	@Autowired
 	HttpSession session;
-	
+
 	private Map<String, List<String>> ipListMap = new HashMap<String, List<String>>();
 	private Map<String, String> exAccess = new HashMap<String, String>();
 	private List<String> serviceList = new ArrayList<String>();
 	private List<String> ipValidationList = new ArrayList<String>();
 	private Map<String, String> loginMap = new HashMap<String, String>();
 	private Map<String, Object> fommatMap = new HashMap<>();
+	private String date = "";
+	private int downloadCount = 0;
+	private int overtimeAccess = 0;
 
 	@RequestMapping("/")
 	public String home1() {
@@ -66,15 +70,19 @@ public class PageController {
 
 	@PostMapping(value = "/document")
 	@ResponseBody
-	public Map<String, Object> document(@RequestBody DataDTO data) throws ParseException, IOException, JSONException {
+	public Map<String, Object> document(@RequestBody DataDTO data) {
 		ipListMap.clear();
 		exAccess.clear();
 		serviceList.clear();
 		ipValidationList.clear();
 		loginMap.clear();
-		
-		String date = GetDate.getCurDay();
-		
+
+		try {
+			date = GetDate.getCurDay();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		// 넘겨받은 데이터 변수에 세팅
 		String serviceName = data.getServiceName();
 		String startDate = data.getStartDate();
@@ -82,9 +90,15 @@ public class PageController {
 		String period = startDate + " ~ " + endDate;
 		String fieldName = "action";
 
-		loginMap = gf.getLoginData(serviceName, startDate, endDate, fieldName);
-		int downloadCount = gf.getDownloadCount(serviceName, startDate, endDate, fieldName);
-		int overtimeAccess = gf.getOvertimeAccess(serviceName, startDate, endDate);
+		try {
+			
+			loginMap = gf.getLoginData(serviceName, startDate, endDate, fieldName);
+			downloadCount = gf.getDownloadCount(serviceName, startDate, endDate, fieldName);
+			overtimeAccess = gf.getOvertimeAccess(serviceName, startDate, endDate);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		serviceList = gf.getServiceList(fieldName);
 		exAccess = gf.getExcessiveAccess(serviceName, startDate, endDate, fieldName);
 		ipListMap = gf.getIpValidation(serviceName, startDate, endDate);
@@ -113,7 +127,7 @@ public class PageController {
 	}
 
 	@GetMapping(value = "/document")
-	public String doc(Model model) throws ParseException {
+	public String doc(Model model) {
 
 		// serviceList 얻기
 		List<String> serviceList = gf.getServiceList("service.keyword");

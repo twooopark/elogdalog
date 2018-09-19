@@ -23,12 +23,14 @@ import com.edlog.boot.springboot.config.ESConfig;
 public class ResponseServiceImpl implements ResponseService {
 
 	@Autowired
-	ESConfig esConfig;
+	private ESConfig esConfig;
 
 	@Value("${my.properties.index}")
 	private String index;
 	@Value("${my.properties.type}")
 	private String type;
+	@Value("${my.standard.exstandard}")
+	private String exStandard;
 
 	@Override
 	public SearchResponse getSearchResponseWithQuery(QueryBuilder query) {
@@ -52,7 +54,7 @@ public class ResponseServiceImpl implements ResponseService {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).addAggregation(aggs).setSize(100).get();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).addAggregation(aggs).get();
 		return sr;
 	}
 
@@ -64,8 +66,7 @@ public class ResponseServiceImpl implements ResponseService {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setQuery(query).addAggregation(aggs)
-				.setSize(1000).get();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setQuery(query).addAggregation(aggs).get();
 		return sr;
 	}
 
@@ -104,7 +105,7 @@ public class ResponseServiceImpl implements ResponseService {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		Terms terms = sr.getAggregations().get(aggsName);
 		for (Bucket entry : terms.getBuckets()) {
-			if (entry.getDocCount() > 10) {
+			if (entry.getDocCount() > Integer.parseInt(exStandard)) {
 				keyList.add(entry.getKeyAsString());
 				docCountList.add(Long.toString(entry.getDocCount()));
 			}

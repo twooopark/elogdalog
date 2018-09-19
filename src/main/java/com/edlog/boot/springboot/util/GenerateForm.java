@@ -35,6 +35,7 @@ public class GenerateForm {
 	private List<String> externalIpList = new ArrayList<String>();
 	private List<String> unAuthIpList = new ArrayList<String>();
 	private Map<String, List<String>> exAccess = new HashMap<String, List<String>>();
+	private List<Map<String, Object>> tempList = new ArrayList<Map<String, Object>>();
 
 	// 로그인 데이터 처리
 	public Map<String, String> getLoginData(String serviceName, String startDate, String endDate, String fieldName)
@@ -76,10 +77,16 @@ public class GenerateForm {
 	}
 
 	// ip체크 결과 리턴
-	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate)
-			throws UnknownHostException {
+	public Map<String, List<String>> getIpValidation(String serviceName, String startDate, String endDate){
+		
 		ipListMap.clear();
-		List<Map<String, Object>> tempList = aq.getReponseToList(serviceName, startDate, endDate);
+		
+		try {
+			tempList = aq.getReponseToList(serviceName, startDate, endDate);
+		} catch (UnknownHostException e) {
+			
+			e.printStackTrace();
+		}
 		externalCount = 0;
 		unAuthCount = 0;
 		for (Map<String, Object> map : tempList) {
@@ -107,10 +114,14 @@ public class GenerateForm {
 
 	// 과다 조회 데이터 처리
 	public Map<String, String> getExcessiveAccess(String serviceName, String startDate, String endDate,
-			String fieldName) throws IOException {
+			String fieldName) {
 		
-		exAccess = aq.getExBucketAsMap(serviceName, startDate, endDate,
-				"access_id.keyword");
+		try {
+			exAccess = aq.getExBucketAsMap(serviceName, startDate, endDate,
+					"access_id.keyword");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		if (!exAccess.isEmpty()) {
 			keyList = exAccess.get("keyList");
