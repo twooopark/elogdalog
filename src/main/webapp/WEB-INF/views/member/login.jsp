@@ -93,10 +93,6 @@
 			$("#pwMsg").text("");
 		})	
 	})
-	
-	function loginFormCheck(){
-		
-	}
 </script>
 </body>
 </html>

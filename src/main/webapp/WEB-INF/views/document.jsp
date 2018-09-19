@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-=======
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/common.jsp"%>
->>>>>>> chaehee
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -43,7 +40,6 @@
 							<input type="radio" class="pick_type_radio" name="pick_type" id="choice"><label for="choice">기간</label>
 						</div>
 
-<<<<<<< HEAD
 								<!-- 주차별 날짜 보기 -->
 								<div class="pick_type_week" id="pick_type_week">
 									<select name="w_year" id="w_year" class="w_datepicker w_datepicker_year" onchange="makeWeekSelectOptions();">
@@ -86,7 +82,7 @@
 							</div>
 					</div>
 				<div class="iframe_wrapper" id="formmat">
-					<!DOCTYPE html>
+				<!DOCTYPE html>
 <!-- saved from url=(0063)https://sns.daou.co.kr/app/approval/document/247188/popup/print -->
 <html lang="ko" class="">
 <head>
@@ -272,42 +268,7 @@ https://citi.donutbook.co.kr/cbadmin/comm/login.do">씨티은행&nbsp;어드민<
 	    </section> 
 </div>
 </div></body></html>
-=======
-						<!-- 주차별 날짜 보기 -->
-						<div class="pick_type_week" id="pick_type_week">
-							<select name="w_year" id="w_year" class="w_datepicker w_datepicker_year" onchange="makeWeekSelectOptions();">
-							<option value="2018" selected="selected">2018년</option>
-							</select>
-							<select name="w_month" id="w_month" class="w_datepicker w_datepicker_month" onchange="makeWeekSelectOptions();">
-								<option value="01">01월</option>
-								<option value="02">02월</option>
-								<option value="03">03월</option>
-								<option value="04">04월</option>
-								<option value="05">05월</option>
-								<option value="06">06월</option>
-								<option value="07">07월</option>
-								<option value="08">08월</option>
-								<option value="09" selected="selected">09월</option>
-								<option value="10">10월</option>
-								<option value="11">11월</option>
-								<option value="12">12월</option>
-							</select>
-							<select name="w_week" class="w_datepicker w_datepicker_week" id="w_week"></select>
-							<button id="searchByWeek" class="search_btn" onclick="searchAndWrite()">조회</button>
-						</div>
-								
-						<!-- 원하는 기간 선택 -->	
-						<div class="pick_type_choice" id="pick_type_choice">
-							<input type="text" class="mydatepicker" id='mydatepicker' readonly="readonly" placeholder="원하는 날짜의 범위를 선택하세요.">
-							<button id="searchByChoice" class="search_btn" onclick="searchAndWrite()">조회</button>
-						</div>
-					</div>
-				</div>
-				<div class="iframe_wrapper">
-					<iframe src="resources/doc/reportTemplate.html" height="100%" width="100%" frameborder="none" >
-						
-					</iframe>
->>>>>>> chaehee
+
 				</div>
 			</div>		
 		</div>
